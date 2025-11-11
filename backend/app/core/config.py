@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     REDIS_URL: str | None = None
     AUTH0_DOMAIN: str | None = None
     AUTH0_AUDIENCE: str | None = None
+    AUTH0_ISSUER: str | None = None
+    # verify mode: 'jwks' (default) or 'userinfo' for dev/fallback
+    AUTH0_VERIFY_MODE: str = "jwks"
 
     class Config:
         env_file = ".env"
