@@ -2,26 +2,26 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Start Postgres + Redis",
+      "label": "Start Services (Postgres, Redis, MinIO)",
       "type": "shell",
-      "command": "./.devcontainer/scripts/start_services.sh",
+      "command": "bash .devcontainer/scripts/start_services.sh",
       "problemMatcher": []
     },
     {
       "label": "Run FastAPI Server",
       "type": "shell",
-      "command": "cd backend && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+      "command": "uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
       "problemMatcher": []
     },
     {
       "label": "Prisma Migrate",
       "type": "shell",
-      "command": "cd backend && prisma migrate dev --name init",
+      "command": "prisma migrate dev --name init",
       "problemMatcher": []
     },
     {
       "label": "Dev Env Setup",
-      "dependsOn": ["Start Postgres + Redis", "Prisma Migrate"],
+      "dependsOn": ["Start Services (Postgres, Redis, MinIO)", "Prisma Migrate"],
       "dependsOrder": "sequence"
     }
   ]

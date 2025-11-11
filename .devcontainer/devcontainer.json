@@ -2,11 +2,10 @@
   "name": "tuma-task-backend",
   "image": "mcr.microsoft.com/devcontainers/python:1-3.12",
   "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "lts"
-    }
+    "ghcr.io/devcontainers/features/node:1": { "version": "lts" },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
-  "forwardPorts": [8000, 5432, 6379],
+  "forwardPorts": [8000, 5432, 6379, 9000, 9001],
   "remoteUser": "vscode",
   "customizations": {
     "vscode": {
@@ -15,12 +14,11 @@
         "ms-python.vscode-pylance",
         "Prisma.prisma",
         "ms-azuretools.vscode-docker"
-      ],
-      "tasks": {
-        "setup": "Run Tasks: Dev Env Setup"
-      }
+      ]
     }
   },
-  "postCreateCommand": "bash .devcontainer/scripts/devcontainer_setup.sh"
-
+  "postCreateCommand": "bash .devcontainer/scripts/devcontainer_setup.sh",
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ]
 }
