@@ -55,7 +55,9 @@ async def get_current_user(
     """
     token = credentials.credentials
     if not token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
+        )
 
     verify_mode = getattr(settings, "AUTH0_VERIFY_MODE", "jwks")
 
@@ -79,7 +81,9 @@ async def get_current_user(
         try:
             userinfo = resp.json()
         except Exception:
-            raise HTTPException(status_code=500, detail="Failed to parse userinfo response")
+            raise HTTPException(
+                status_code=500, detail="Failed to parse userinfo response"
+            )
 
         return userinfo
 
@@ -92,11 +96,15 @@ async def get_current_user(
     try:
         unverified_header = jwt.get_unverified_header(token)
     except JWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token header")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token header"
+        )
 
     kid = unverified_header.get("kid")
     if not kid:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token missing kid header")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token missing kid header"
+        )
 
     rsa_key = {}
     for key in jwks.get("keys", []):
@@ -125,7 +133,10 @@ async def get_current_user(
                 break
 
     if not rsa_key:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Appropriate JWKS key not found")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Appropriate JWKS key not found",
+        )
 
     issuer = settings.AUTH0_ISSUER or f"https://{settings.AUTH0_DOMAIN}/"
     try:
@@ -138,7 +149,10 @@ async def get_current_user(
         )
     except JWTError as e:
         # More specific error handling (expired, invalid claims) could be added here
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"Token validation error: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Token validation error: {str(e)}",
+        )
 
     # Return the validated claims; services can map these to internal user models
     return payload
