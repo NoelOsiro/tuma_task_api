@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Postgres + Redis",
+      "type": "shell",
+      "command": "docker compose -f backend/docker-compose.yml up -d db redis",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run FastAPI Server",
+      "type": "shell",
+      "command": "cd backend && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+      "problemMatcher": []
+    },
+    {
+      "label": "Prisma Migrate",
+      "type": "shell",
+      "command": "cd backend && prisma migrate dev --name init",
+      "problemMatcher": []
+    },
+    {
+      "label": "Dev Env Setup",
+      "dependsOn": ["Start Postgres + Redis", "Prisma Migrate"],
+      "dependsOrder": "sequence"
+    }
+  ]
+}

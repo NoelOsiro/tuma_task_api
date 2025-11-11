@@ -1,52 +1,26 @@
 {
   "name": "tuma-task-backend",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:1": {},
-    "ghcr.io/devcontainers/features/node:1": { "version": "20" },
-    "ghcr.io/devcontainers/features/python:1": { "version": "3.12" },
-    "ghcr.io/devcontainers/features/postgres:1": { "version": "16", "port": 5432 },
-    "ghcr.io/devcontainers/features/redis:1": { "version": "7", "port": 6379 }
+  "build": {
+    "dockerfile": "../backend/Dockerfile",
+    "context": "../backend"
   },
-
-  "postCreateCommand": "cd backend && python -m pip install --upgrade pip && pip install -r requirements.txt && prisma generate || true",
-
+  "forwardPorts": [8000, 5432, 6379],
+  "remoteUser": "vscode",
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
   ],
-
-  "forwardPorts": [8000, 5432, 6379],
-
-  "remoteUser": "vscode",
-
   "customizations": {
     "vscode": {
-      "settings": {
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "editor.formatOnSave": true,
-        "python.analysis.autoImportCompletions": true,
-        "python.linting.enabled": true,
-        "python.linting.pylintEnabled": true,
-        "python.testing.pytestEnabled": true
-      },
       "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance",
-        "ms-python.debugpy",
-        "ms-azuretools.vscode-docker",
         "Prisma.prisma",
-        "ms-toolsai.jupyter"
-      ]
+        "ms-azuretools.vscode-docker"
+      ],
+      "tasks": {
+        "setup": "Run Tasks: Dev Env Setup"
+      }
     }
   },
-
-  "containerEnv": {
-    "DATABASE_URL": "postgresql://postgres:postgres@localhost:5432/tumatask",
-    "REDIS_URL": "redis://localhost:6379",
-    "AUTH0_DOMAIN": "your-tenant-region.auth0.com",
-    "AUTH0_CLIENT_ID": "your-client-id",
-    "AUTH0_CLIENT_SECRET": "your-client-secret",
-    "API_URL": "http://localhost:8000"
-  }
+  "postCreateCommand": "python -m pip install --upgrade pip && pip install -r requirements.txt && prisma generate"
 }
