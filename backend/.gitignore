@@ -1,0 +1,86 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.env/
+env.bak/
+venv.bak/
+
+# Pytest
+.pytest_cache/
+.cache
+
+# Coverage
+.coverage
+htmlcov/
+.coverage.*
+
+# Type checkers
+.mypy_cache/
+.pyre/
+.pytype/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# dotenv
+.env
+.env.*
+
+# Docker
+docker-compose.override.yml
+*.local
+
+# Database
+*.db
+*.sqlite3
+
+# Prisma
+prisma/__pycache__/
+prisma/migrations/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Misc
+*.sqlite3
+*.db
