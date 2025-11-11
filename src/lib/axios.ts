@@ -72,31 +72,24 @@ export const deleter = async (args: string | [string, AxiosRequestConfig]) => {
 // ----------------------------------------------------------------------
 
 export const endpoints = {
-  chat: '/api/chat',
-  kanban: '/api/kanban',
-  calendar: '/api/calendar',
+  chat: '/chat',
+  kanban: '/kanban',
+  calendar: '/calendar',
   auth: { me: '/auth/me', signIn: '/auth/login', signUp: '/auth/register' },
-  mail: { list: '/api/mail/list', details: '/api/mail/details', labels: '/api/mail/labels' },
+  mail: { list: '/mail/list', details: '/mail/details', labels: '/mail/labels' },
   post: {
-    list: '/api/post/list',
-    details: '/api/post/details',
-    latest: '/api/post/latest',
-    search: '/api/post/search',
+    list: '/post/list',
+    details: '/post/details',
+    latest: '/post/latest',
+    search: '/post/search',
   },
-  leave: {
-    list: '/api/leave',
-    details: '/api/leave/',
-    search: '/api/leave/search',
-    create: '/api/leave/create/',
-    update: '/api/leave/update',
-    delete: '/api/leave',
-    balances: {
-      list: '/api/leave/balances',
-      details: '/api/leave/balances/',
-      create: '/api/leave/balances/create/',
-      update: '/api/leave/balances/update',
-      delete: '/api/leave/balances',
-    }
+  tasks: {
+    list: '/tasks',
+    details: '/tasks/',
+    search: '/tasks/search',
+    create: '/tasks/create/',
+    update: '/tasks/update',
+    delete: '/tasks',
   },
   customer: {
     list: '/customers',
