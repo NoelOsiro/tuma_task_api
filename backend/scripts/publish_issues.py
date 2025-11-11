@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import List, Optional
 
 import yaml
-from github import Github
+from github import Github, Auth
 from github.GithubException import GithubException
 
 
@@ -129,6 +129,7 @@ def main():
     parser.add_argument("--token", help="GitHub token (or set GITHUB_TOKEN env var)")
     parser.add_argument("--dir", help="Directory with markdown files to publish")
     parser.add_argument("--csv", help="CSV file with issues (columns: title,body,labels,assignees,milestone)")
+    parser.add_argument("--whoami", action="store_true", help="Validate token and print authenticated username (no repo actions)")
     parser.add_argument("--dry-run", action="store_true", help="Don't create issues, just print what would be done")
     parser.add_argument("--skip-if-exists", action="store_true", default=True, help="Skip creation if an open issue with same title exists (default: True)")
     args = parser.parse_args()
@@ -137,7 +138,22 @@ def main():
     if not token:
         raise SystemExit("GitHub token required via --token or GITHUB_TOKEN env var")
 
-    gh = Github(token)
+    # Use the newer auth API to avoid deprecation warnings in PyGithub
+    try:
+        gh = Github(auth=Auth.Token(token))
+    except Exception:
+        # Fallback to older constructor if Auth isn't available in this PyGithub version
+        gh = Github(token)
+    # If the user only wants to validate token, do that and exit safely
+    if args.whoami:
+        try:
+            user = gh.get_user()
+            print("Authenticated as:", user.login)
+            print("User id:", user.id)
+        except Exception as e:
+            raise SystemExit(f"Token validation failed: {e}")
+        return
+
     try:
         repo = gh.get_repo(args.repo)
     except Exception as e:
