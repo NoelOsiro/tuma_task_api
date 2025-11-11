@@ -1,0 +1,15 @@
+{
+  "name": "tuma-task-dev",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:1": {},
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" },
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.12" }
+  },
+  "postCreateCommand": "cd backend && python -m pip install --upgrade pip && pip install -r requirements.txt || true",
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+  "forwardPorts": [8000, 5432, 6379, 9000, 9001],
+  "remoteUser": "vscode"
+}
