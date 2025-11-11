@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-py"
+  output   = "../backend/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(uuid())
+  auth0Sub       String   @unique @map("auth0_sub") // link to Auth0 user (e.g. auth0|abc123)
+  email          String   @unique
+  name           String?
+  phone          String?  @unique
+  profilePicture String?  @map("profile_picture")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  tasksCreated   Task[]   @relation("CreatorTasks")
+  tasksAssigned  Task[]   @relation("AssignedTasks")
+}
+
+model Task {
+  id            String   @id @default(uuid())
+  title         String
+  description   String?
+  location      String?                // Nairobi, Kibera, etc.
+  latitude      Float?                 // for geolocation filtering
+  longitude     Float?
+  price         Float?                 // amount offered for task
+  status        TaskStatus @default(PENDING)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Relations
+  creatorId     String
+  assigneeId    String?
+  creator       User      @relation("CreatorTasks", fields: [creatorId], references: [id])
+  assignee      User?     @relation("AssignedTasks", fields: [assigneeId], references: [id])
+
+  // Optional future relationships
+  payments      Payment[]
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  method        String? // e.g. "mpesa", "card"
+  transactionId String? @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  taskId        String
+  task          Task     @relation(fields: [taskId], references: [id])
+}
+
+enum TaskStatus {
+  PENDING
+  ASSIGNED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}

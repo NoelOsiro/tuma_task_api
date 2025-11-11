@@ -56,3 +56,66 @@ jobs:
         # Run pytest against the backend tests; PYTHONPATH points to backend so `import app` works
         run: |
           pytest backend/app/tests -q
+
+  integration:
+    name: Integration tests (Prisma DB push)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: tuma
+          POSTGRES_PASSWORD: tuma_pass
+          POSTGRES_DB: tuma_dev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U tuma -d tuma_dev" --health-interval 5s --health-timeout 2s --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js (Prisma CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python deps
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Wait for Postgres
+        run: sleep 5
+
+      - name: Export DATABASE_URL
+        run: echo "DATABASE_URL=postgresql://tuma:tuma_pass@localhost:5432/tuma_dev" >> $GITHUB_ENV
+
+      - name: Prisma DB push (sync schema)
+        working-directory: .
+        run: |
+          npx --yes prisma db push --schema=prisma/schema.prisma
+          npx --yes prisma generate --schema=prisma/schema.prisma
+
+      - name: Run integration tests
+        working-directory: ./backend
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+        run: |
+          pytest -q
