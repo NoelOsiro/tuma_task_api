@@ -4,12 +4,7 @@
     "dockerfile": "../backend/Dockerfile",
     "context": "../backend"
   },
-  "features": {
-    "ghcr.io/itsmechlark/features/postgresql:1": {
-      "version": "latest"
-    },
-    "ghcr.io/devcontainers/features/redis:1": {}
-  },
+  "features": {},
   "forwardPorts": [8000, 5432, 6379],
   "remoteUser": "vscode",
   "customizations": {
@@ -25,6 +20,6 @@
       }
     }
   },
-  "postCreateCommand": "cd backend && python -m pip install --upgrade pip && pip install -r requirements.txt && prisma generate"
+  "postCreateCommand": "bash .devcontainer/scripts/devcontainer_setup.sh"
 
 }
