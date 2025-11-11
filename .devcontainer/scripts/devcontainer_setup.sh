@@ -4,7 +4,8 @@ set -e
 echo "📦 Setting up dev environment..."
 # Resolve repo root relative to this script so installs run from the repo
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# repo root is two levels up from .devcontainer/scripts
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 python -m pip install --upgrade pip
 
