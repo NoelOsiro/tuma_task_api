@@ -51,17 +51,34 @@ def parse_markdown_file(path: Path) -> dict:
                 # fallback: ignore frontmatter parse errors
                 pass
 
-    return {"title": title, "body": body, "labels": labels, "assignees": assignees, "milestone": milestone}
+    return {
+        "title": title,
+        "body": body,
+        "labels": labels,
+        "assignees": assignees,
+        "milestone": milestone,
+    }
 
 
-def publish_issue(repo, title: str, body: str, labels: Optional[List[str]] = None, assignees: Optional[List[str]] = None, milestone: Optional[str] = None, dry_run: bool = False, skip_if_exists: bool = True):
+def publish_issue(
+    repo,
+    title: str,
+    body: str,
+    labels: Optional[List[str]] = None,
+    assignees: Optional[List[str]] = None,
+    milestone: Optional[str] = None,
+    dry_run: bool = False,
+    skip_if_exists: bool = True,
+):
     labels = labels or []
     assignees = assignees or []
 
     # check duplicates by title
     if skip_if_exists:
         try:
-            existing = list(repo.get_issues(state="open", sort="created", direction="desc"))
+            existing = list(
+                repo.get_issues(state="open", sort="created", direction="desc")
+            )
             for issue in existing:
                 if issue.title.strip() == title.strip():
                     print(f"SKIP (exists): {title}")
@@ -72,7 +89,13 @@ def publish_issue(repo, title: str, body: str, labels: Optional[List[str]] = Non
 
     print(f"CREATE: {title}")
     if dry_run:
-        return {"title": title, "body": body, "labels": labels, "assignees": assignees, "milestone": milestone}
+        return {
+            "title": title,
+            "body": body,
+            "labels": labels,
+            "assignees": assignees,
+            "milestone": milestone,
+        }
 
     gh_labels = labels if labels else None
     gh_assignees = assignees if assignees else None
@@ -112,7 +135,16 @@ def publish_from_dir(repo, dirpath: Path, dry_run: bool = False, **kwargs):
     results = []
     for f in files:
         data = parse_markdown_file(f)
-        res = publish_issue(repo, data["title"], data["body"], labels=data.get("labels"), assignees=data.get("assignees"), milestone=data.get("milestone"), dry_run=dry_run, **kwargs)
+        res = publish_issue(
+            repo,
+            data["title"],
+            data["body"],
+            labels=data.get("labels"),
+            assignees=data.get("assignees"),
+            milestone=data.get("milestone"),
+            dry_run=dry_run,
+            **kwargs,
+        )
         results.append((f.name, res))
     return results
 
@@ -124,23 +156,54 @@ def publish_from_csv(repo, csvpath: Path, dry_run: bool = False, **kwargs):
         for row in reader:
             title = row.get("title") or row.get("Title")
             body = row.get("body") or row.get("Body") or ""
-            labels = [s.strip() for s in (row.get("labels") or "").split(",") if s.strip()]
-            assignees = [s.strip() for s in (row.get("assignees") or "").split(",") if s.strip()]
+            labels = [
+                s.strip() for s in (row.get("labels") or "").split(",") if s.strip()
+            ]
+            assignees = [
+                s.strip() for s in (row.get("assignees") or "").split(",") if s.strip()
+            ]
             milestone = row.get("milestone") or None
-            res = publish_issue(repo, title, body, labels=labels, assignees=assignees, milestone=milestone, dry_run=dry_run, **kwargs)
+            res = publish_issue(
+                repo,
+                title,
+                body,
+                labels=labels,
+                assignees=assignees,
+                milestone=milestone,
+                dry_run=dry_run,
+                **kwargs,
+            )
             results.append((title, res))
     return results
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--repo", required=False, help="Repository in owner/repo format")
+    parser.add_argument(
+        "--repo", required=False, help="Repository in owner/repo format"
+    )
     parser.add_argument("--token", help="GitHub token (or set GITHUB_TOKEN env var)")
     parser.add_argument("--dir", help="Directory with markdown files to publish")
-    parser.add_argument("--csv", help="CSV file with issues (columns: title,body,labels,assignees,milestone)")
-    parser.add_argument("--whoami", action="store_true", help="Validate token and print authenticated username (no repo actions)")
-    parser.add_argument("--dry-run", action="store_true", help="Don't create issues, just print what would be done")
-    parser.add_argument("--skip-if-exists", action="store_true", default=True, help="Skip creation if an open issue with same title exists (default: True)")
+    parser.add_argument(
+        "--csv",
+        help="CSV file with issues (columns: title,body,labels,assignees,milestone)",
+    )
+    parser.add_argument(
+        "--whoami",
+        action="store_true",
+        help="Validate token and print authenticated username (no repo actions)",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Don't create issues, just print what would be done",
+    )
+    parser.add_argument(
+        "--skip-if-exists",
+        action="store_true",
+        default=True,
+        help="Skip creation if an open issue with same title exists (default: True)",
+    )
     args = parser.parse_args()
 
     token = args.token or os.environ.get("GITHUB_TOKEN")
@@ -172,12 +235,16 @@ def main():
         d = Path(args.dir)
         if not d.exists():
             raise SystemExit(f"Directory not found: {d}")
-        publish_from_dir(repo, d, dry_run=args.dry_run, skip_if_exists=args.skip_if_exists)
+        publish_from_dir(
+            repo, d, dry_run=args.dry_run, skip_if_exists=args.skip_if_exists
+        )
     elif args.csv:
         p = Path(args.csv)
         if not p.exists():
             raise SystemExit(f"CSV file not found: {p}")
-        publish_from_csv(repo, p, dry_run=args.dry_run, skip_if_exists=args.skip_if_exists)
+        publish_from_csv(
+            repo, p, dry_run=args.dry_run, skip_if_exists=args.skip_if_exists
+        )
     else:
         raise SystemExit("Either --dir or --csv must be provided")
 
