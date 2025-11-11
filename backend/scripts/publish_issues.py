@@ -89,8 +89,17 @@ def publish_issue(repo, title: str, body: str, labels: Optional[List[str]] = Non
         except GithubException as e:
             print(f"Warning: could not find/create milestone '{milestone}': {e}")
 
+    # Build kwargs and avoid passing None values which can trigger assertion errors in PyGithub
+    create_kwargs = {"title": title, "body": body}
+    if gh_labels:
+        create_kwargs["labels"] = gh_labels
+    if gh_assignees:
+        create_kwargs["assignees"] = gh_assignees
+    if gh_milestone:
+        create_kwargs["milestone"] = gh_milestone
+
     try:
-        issue = repo.create_issue(title=title, body=body, labels=gh_labels, assignees=gh_assignees, milestone=gh_milestone)
+        issue = repo.create_issue(**create_kwargs)
         print("Created:", issue.html_url)
         return issue
     except GithubException as e:
@@ -125,7 +134,7 @@ def publish_from_csv(repo, csvpath: Path, dry_run: bool = False, **kwargs):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--repo", required=True, help="Repository in owner/repo format")
+    parser.add_argument("--repo", required=False, help="Repository in owner/repo format")
     parser.add_argument("--token", help="GitHub token (or set GITHUB_TOKEN env var)")
     parser.add_argument("--dir", help="Directory with markdown files to publish")
     parser.add_argument("--csv", help="CSV file with issues (columns: title,body,labels,assignees,milestone)")
