@@ -9,32 +9,52 @@ echo "Running devcontainer setup..."
 # Ensure apt is non-interactive
 export DEBIAN_FRONTEND=noninteractive
 
-# Update and install packages
+# Try to ensure pip is available (some images may not have pip in PATH)
+if ! python -m pip --version >/dev/null 2>&1; then
+  echo "pip not found — attempting to install via ensurepip..."
+  if python -m ensurepip --upgrade >/dev/null 2>&1; then
+    python -m pip install --upgrade pip || true
+  else
+    echo "ensurepip not available. Attempting get-pip.py bootstrap..."
+    # Try bootstrap get-pip.py as a last resort
+    GET_PIP_URL="https://bootstrap.pypa.io/get-pip.py"
+    TMP_PIP_SCRIPT="/tmp/get-pip.py"
+    if command -v curl >/dev/null 2>&1; then
+      curl -sSfL "$GET_PIP_URL" -o "$TMP_PIP_SCRIPT" || true
+    elif command -v wget >/dev/null 2>&1; then
+      wget -qO "$TMP_PIP_SCRIPT" "$GET_PIP_URL" || true
+    fi
+    if [ -f "$TMP_PIP_SCRIPT" ]; then
+      echo "Running get-pip.py to install pip..."
+      python "$TMP_PIP_SCRIPT" || echo "get-pip.py failed."
+      rm -f "$TMP_PIP_SCRIPT"
+    else
+      echo "Could not download get-pip.py. pip installation skipped. Use an image with pip or install pip manually."
+    fi
+  fi
+fi
+
+# If apt is available, install lightweight client tools for readiness checks (not servers).
+# Installing full database servers inside the app container is optional and often discouraged.
 if command -v apt-get >/dev/null 2>&1; then
-  echo "Updating apt and installing postgresql and redis-server..."
-  sudo apt-get update -y
-  sudo apt-get install -y postgresql redis-server
+  echo "apt-get available — installing client utilities (postgres-client, redis-tools)..."
+  sudo apt-get update -y || true
+  sudo apt-get install -y postgresql-client redis-tools || true
 else
-  echo "apt-get not available in this image; ensure postgres and redis are present by other means."
+  echo "apt-get not available in this image; cannot install client tools. If you need Postgres/Redis inside the devcontainer, consider using a different base image or run services on the host (docker-compose)."
 fi
 
-# Start services
-if command -v service >/dev/null 2>&1; then
-  echo "Starting postgresql and redis-server via service..."
-  sudo service postgresql start || true
-  sudo service redis-server start || true
-fi
+# We intentionally avoid attempting to install and run system Postgres/Redis servers inside this container
+# because it's brittle across different base images. Use the 'Start Postgres + Redis' task, docker-compose,
+# or run the services on your host/VM instead.
 
-# Try pg_ctlcluster for Debian-based feature setups
-if command -v pg_ctlcluster >/dev/null 2>&1; then
-  echo "Ensuring postgres cluster is running via pg_ctlcluster..."
-  sudo pg_ctlcluster 15 main start || true
-fi
-
-# Confirm services
+# Confirm client tools and attempt simple readiness checks if possible
 if command -v pg_isready >/dev/null 2>&1; then
   echo "Postgres readiness:" && pg_isready -h localhost -p 5432 || true
+elif command -v psql >/dev/null 2>&1; then
+  echo "psql client available but pg_isready not found."
 fi
+
 if command -v redis-cli >/dev/null 2>&1; then
   echo "Redis ping:" && redis-cli -h localhost -p 6379 ping || true
 fi
