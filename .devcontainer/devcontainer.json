@@ -5,8 +5,8 @@
     "context": "../backend"
   },
   "features": {
-    "ghcr.io/devcontainers/features/postgres:1": {
-      "postgresVersion": "15"
+    "ghcr.io/itsmechlark/features/postgresql:1": {
+      "version": "latest"
     },
     "ghcr.io/devcontainers/features/redis:1": {}
   },
