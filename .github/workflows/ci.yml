@@ -48,7 +48,11 @@ jobs:
         run: |
           black --check .
 
+      - name: Set PYTHONPATH
+        # Ensure pytest can import the `app` package by adding backend to PYTHONPATH
+        run: echo "PYTHONPATH=$(pwd)/backend" >> $GITHUB_ENV
+
       - name: Run tests
-        working-directory: ./backend
+        # Run pytest against the backend tests; PYTHONPATH points to backend so `import app` works
         run: |
-          pytest -q
+          pytest backend/app/tests -q
