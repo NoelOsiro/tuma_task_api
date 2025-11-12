@@ -132,7 +132,8 @@ export function AuthCenteredLayout({
       /** **************************************
        * @Styles
        *************************************** */
-      cssVars={{ '--layout-auth-content-width': '420px', ...cssVars }}
+    // increase default centered content width so forms don't get squeezed on large screens
+    cssVars={{ '--layout-auth-content-width': 'min(920px, 90vw)', ...cssVars }}
       sx={[
         (theme) => ({
           position: 'relative',

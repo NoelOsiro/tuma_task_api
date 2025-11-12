@@ -66,7 +66,7 @@ export const navData: NavSectionProps['data'] = [
     subheader: 'Management',
     items: [
       {
-        title: 'Customers',
+        title: 'Tasks',
         path: paths.dashboard.customer.root,
         icon: ICONS.user,
         children: [

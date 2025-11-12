@@ -35,7 +35,7 @@ export function HomeMinimal({ sx, ...other }: BoxProps) {
       <SectionTitle
         caption="Our Services"
         title="Why Choose"
-        txtGradient="AzubiISP?"
+        txtGradient="TumaTask?"
         sx={{ mb: { xs: 5, md: 8 }, textAlign: { xs: 'center', md: 'left' } }}
       />
 
