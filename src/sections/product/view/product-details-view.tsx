@@ -42,7 +42,7 @@ export function ProductDetailsView({ product }: Props) {
     <DashboardContent>
       <ProductDetailsToolbar
         backHref={paths.dashboard.leave.root}
-        liveHref={paths.leave.details(`${product?.id}`)}
+        liveHref={paths.product.details(`${product?.id}`)}
         editHref={paths.dashboard.leave.edit(`${product?.id}`)}
         publish={publish}
         onChangePublish={handleChangePublish}

@@ -50,7 +50,7 @@ export const navData: NavSectionProps['data'] = [
   {
     subheader: 'Overview',
     items: [
-      { title: 'Dashboard', path: paths.dashboard.root, icon: ICONS.dashboard },
+      { title: 'Home', path: paths.dashboard.root, icon: ICONS.dashboard },
       // { title: 'Ecommerce', path: paths.dashboard.general.ecommerce, icon: ICONS.ecommerce },
       // { title: 'Analytics', path: paths.dashboard.general.analytics, icon: ICONS.analytics },
       // { title: 'Banking', path: paths.dashboard.general.banking, icon: ICONS.banking },
@@ -72,8 +72,8 @@ export const navData: NavSectionProps['data'] = [
         children: [
           // { title: 'Profile', path: paths.dashboard.user.root },
           // { title: 'Cards', path: paths.dashboard.user.cards },
-          { title: 'Summary', path: paths.dashboard.customer.root },
-          { title: 'List', path: paths.dashboard.customer.list },
+          { title: 'Create', path: paths.dashboard.customer.root },
+          { title: 'My Tasks', path: paths.dashboard.tasks.root },
           // { title: 'Create', path: paths.dashboard.user.new },
           // { title: 'Edit', path: paths.dashboard.customer.demo.edit },
           // { title: 'Account', path: paths.dashboard.customer.account },

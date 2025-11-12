@@ -50,7 +50,7 @@ function CheckoutContainer({ children }: CheckoutProviderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const activeStep = pathname.includes(paths.leave.checkout)
+  const activeStep = pathname.includes(paths.product.checkout)
     ? Number(searchParams.get('step'))
     : null;
 
@@ -101,7 +101,7 @@ function CheckoutContainer({ children }: CheckoutProviderProps) {
       const targetStep = stepNumbers[type];
       const queryString = new URLSearchParams({ step: `${targetStep}` }).toString();
       const redirectPath =
-        targetStep === 0 ? paths.leave.checkout : `${paths.leave.checkout}?${queryString}`;
+        targetStep === 0 ? paths.product.checkout : `${paths.product.checkout}?${queryString}`;
 
       router.push(redirectPath);
     },

@@ -22,16 +22,17 @@ import { Label } from 'src/components/label';
 import { Image } from 'src/components/image';
 import { Iconify } from 'src/components/iconify';
 import { CustomPopover } from 'src/components/custom-popover';
+import ITaskItem from 'src/types/task';
 
 // ----------------------------------------------------------------------
 
 type Props = CardProps & {
-  post: IPostItem;
+  task: ITaskItem;
   editHref: string;
   detailsHref: string;
 };
 
-export function PostItemHorizontal({ sx, post, editHref, detailsHref, ...other }: Props) {
+export function PostItemHorizontal({ sx, task, editHref, detailsHref, ...other }: Props) {
   const menuActions = usePopover();
 
   const renderMenuActions = () => (
@@ -84,12 +85,12 @@ export function PostItemHorizontal({ sx, post, editHref, detailsHref, ...other }
               justifyContent: 'space-between',
             }}
           >
-            <Label variant="soft" color={(post.publish === 'published' && 'info') || 'default'}>
-              {post.publish}
+            <Label variant="soft" color={(task.status === 'open' && 'info') || 'default'}>
+              {task.status}
             </Label>
 
             <Box component="span" sx={{ typography: 'caption', color: 'text.disabled' }}>
-              {fDate(post.createdAt)}
+              {fDate(task.created_at)}
             </Box>
           </Box>
 
@@ -105,7 +106,7 @@ export function PostItemHorizontal({ sx, post, editHref, detailsHref, ...other }
                 }),
               ]}
             >
-              {post.title}
+              {task.title}
             </Link>
 
             <Typography
@@ -117,7 +118,7 @@ export function PostItemHorizontal({ sx, post, editHref, detailsHref, ...other }
                 }),
               ]}
             >
-              {post.description}
+              {task.description}
             </Typography>
           </Stack>
 
@@ -142,17 +143,17 @@ export function PostItemHorizontal({ sx, post, editHref, detailsHref, ...other }
             >
               <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
                 <Iconify icon="eva:message-circle-fill" width={16} />
-                {fShortenNumber(post.totalComments)}
+                {fShortenNumber(33)}
               </Box>
 
               <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
                 <Iconify icon="solar:eye-bold" width={16} />
-                {fShortenNumber(post.totalViews)}
+                {fShortenNumber(33)}
               </Box>
 
               <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
                 <Iconify icon="solar:share-bold" width={16} />
-                {fShortenNumber(post.totalShares)}
+                {fShortenNumber(33)}
               </Box>
             </Box>
           </Box>
@@ -169,8 +170,8 @@ export function PostItemHorizontal({ sx, post, editHref, detailsHref, ...other }
           }}
         >
           <Avatar
-            alt={post.author.name}
-            src={post.author.avatarUrl}
+            alt="Noel Osiro"
+            src={task.author.avatarUrl}
             sx={{
               top: 16,
               right: 16,
@@ -178,7 +179,7 @@ export function PostItemHorizontal({ sx, post, editHref, detailsHref, ...other }
               position: 'absolute',
             }}
           />
-          <Image alt={post.title} src={post.coverUrl} sx={{ height: 1, borderRadius: 1.5 }} />
+          <Image alt={task.title} src={task.coverUrl} sx={{ height: 1, borderRadius: 1.5 }} />
         </Box>
       </Card>
 

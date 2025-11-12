@@ -31,9 +31,12 @@ type Props = CardProps & {
 export function BookingAvailable({ title, subheader, chart, sx, ...other }: Props) {
   const theme = useTheme();
 
-  const total = sumBy(chart.series, (series) => series.value);
+  const total = sumBy(chart.series, (series) => series.value) || 0;
 
-  const chartSeries = (chart.series.filter((i) => i.label === 'Sold out')[0].value / total) * 100;
+  // Prefer the 'Sold out' series if present, otherwise fall back to the first series.
+  const soldItem = chart.series.find((i) => i.label === 'Sold out') ?? chart.series[0];
+  const soldValue = soldItem?.value ?? 0;
+  const chartSeries = total > 0 ? (soldValue / total) * 100 : 0;
 
   const chartColors = chart.colors ?? [theme.palette.primary.light, theme.palette.primary.main];
 
@@ -56,7 +59,7 @@ export function BookingAvailable({ title, subheader, chart, sx, ...other }: Prop
         dataLabels: {
           name: { offsetY: -12 },
           value: { offsetY: 6 },
-          total: { label: 'Tours', formatter: () => fNumber(total) },
+          total: { label: 'Tasks', formatter: () => fNumber(total) },
         },
       },
     },
@@ -102,7 +105,7 @@ export function BookingAvailable({ title, subheader, chart, sx, ...other }: Prop
               }}
             />
             <Box sx={{ color: 'text.secondary', flexGrow: 1 }}>{item.label}</Box>
-            {item.value} tours
+            {fNumber(item.value)} tasks
           </Box>
         ))}
       </Box>

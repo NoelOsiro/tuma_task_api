@@ -1,25 +1,24 @@
 import type { Metadata } from 'next';
 
 import { CONFIG } from 'src/global-config';
-import axios, { endpoints } from 'src/lib/axios';
-import { getProduct } from 'src/actions/product-ssr';
+import { _customerList } from 'src/_mock/_customerList';
 
-import { ProductShopDetailsView } from 'src/sections/product/view';
+import { CustomerEditView } from 'src/sections/customer/view';
 
 // ----------------------------------------------------------------------
 
-export const metadata: Metadata = { title: `Product details - ${CONFIG.appName}` };
+export const metadata: Metadata = { title: `Customer edit | Dashboard - ${CONFIG.appName}` };
 
 type Props = {
   params: { id: string };
 };
 
-export default async function Page({ params }: Props) {
+export default function Page({ params }: Props) {
   const { id } = params;
 
-  const { product } = await getProduct(id);
+  const currentCustomer = _customerList.find((customer) => customer.id === id);
 
-  return <ProductShopDetailsView product={product} />;
+  return <CustomerEditView customer={currentCustomer} />;
 }
 
 // ----------------------------------------------------------------------
@@ -38,8 +37,7 @@ export { dynamic };
  */
 export async function generateStaticParams() {
   if (CONFIG.isStaticExport) {
-    const res = await axios.get(endpoints.product.list);
-    return res.data.products.map((product: { id: string }) => ({ id: product.id }));
+    return _customerList.map((customer) => ({ id: customer.id }));
   }
   return [];
 }

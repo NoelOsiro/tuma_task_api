@@ -24,7 +24,7 @@ export function ProductList({ leaves, loading, sx, ...other }: Props) {
       <ProductItem
         key={product.id}
         product={product}
-        detailsHref={paths.leave.details(product.id)}
+        detailsHref={paths.product.details(product.id)}
       />
     ));
 

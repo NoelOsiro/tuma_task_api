@@ -1,17 +1,18 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid2';
 
 import { DashboardContent } from 'src/layouts/dashboard';
-import { useCustomerStore } from 'src/store/customerStore';
-import { _bookings, _bookingNew, _bookingReview, _bookingsOverview } from 'src/_mock';
+import { _bookings, _bookingNew, _bookingReview, _bookingsOverview, _appFeatured } from 'src/_mock';
+import { fetcher, endpoints } from 'src/lib/axios';
 import {
   BookingIllustration,
   CheckInIllustration,
   CheckoutIllustration,
+  SeoIllustration,
 } from 'src/assets/illustrations';
 
 import { BookingBooked } from '../booking-booked';
@@ -23,28 +24,75 @@ import { BookingTotalIncomes } from '../booking-total-incomes';
 import { BookingWidgetSummary } from '../booking-widget-summary';
 import { BookingCheckInWidgets } from '../booking-check-in-widgets';
 import { BookingCustomerReviews } from '../booking-customer-reviews';
+import { Button } from '@mui/material';
+import { AppWelcome } from '../../app/app-welcome';
+import { useAuthContext } from 'src/auth/hooks/use-auth-context';
+import { AppFeatured } from '../../app/app-featured';
 
 // ----------------------------------------------------------------------
 
 export function OverviewBookingView() {
-  const customers = useCustomerStore((state) => state.customers);
-  const fetchCustomers = useCustomerStore((state) => state.fetchCustomers);
+  const { user } = useAuthContext();
+  const [tasks, setTasks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchCustomers();
+    let mounted = true;
+    const load = async () => {
+      setLoading(true);
+      try {
+        const data = await fetcher(endpoints.tasks.list);
+        // `fetcher` returns the whole response data shape; the API returns { data: [...] }
+        const items = data?.data ?? data ?? [];
+        if (mounted) setTasks(items);
+      } catch (err) {
+        console.warn('[overview] failed to load tasks, falling back to mock data', err);
+        if (mounted) setTasks(_bookings as any[]);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    load();
+
+    return () => {
+      mounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const totalActive = customers.length;
-  const totalPPPoE = customers.filter((c) => c.service_type === 'ppoe').length;
-  const totalHotspot = customers.filter((c) => c.service_type === 'hotspot').length;
+  const totalActive = tasks.length
+  const totalPending = tasks.filter((t) => t.status === 'open' || t.status === 'assigned').length || 0;
+  const totalCompleted = tasks.filter((t) => t.status === 'completed').length || 0;
+  const _taskOverview = [
+    { status: 'open', value: tasks.filter((t) => t.status === 'open').length, quantity: tasks.filter((t) => t.status === 'open').length },
+    { status: 'assigned', value: tasks.filter((t) => t.status === 'assigned').length, quantity: tasks.filter((t) => t.status === 'assigned').length },
+    { status: 'in_progress', value: tasks.filter((t) => t.status === 'in_progress').length, quantity: tasks.filter((t) => t.status === 'in_progress').length },
+    { status: 'completed', value: tasks.filter((t) => t.status === 'completed').length, quantity: tasks.filter((t) => t.status === 'completed').length },
+  ];
 
   return (
     <DashboardContent maxWidth="xl">
-      <Grid container spacing={3}>
+      <Grid container spacing={3} mb={3}>
+        <Grid size={{ xs: 12, md: 8 }}>
+          <AppWelcome
+            title={`Welcome back 👋 \n ${user?.displayName}`}
+            description="Fill your Profile to get started"
+            img={<SeoIllustration hideBackground />}
+            action={
+              <Button variant="contained" color="primary" href='user/'>
+                Profile
+              </Button>
+            }
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 4 }}>
+          <AppFeatured list={_appFeatured} />
+        </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <BookingWidgetSummary
-            title="Total Active Users"
+            title="Total Active Tasks"
             percent={0}
             total={totalActive}
             icon={<BookingIllustration />}
@@ -53,18 +101,18 @@ export function OverviewBookingView() {
 
         <Grid size={{ xs: 12, md: 4 }}>
           <BookingWidgetSummary
-            title="PPPoE Users"
+            title="Pending Tasks"
             percent={0}
-            total={totalPPPoE}
+            total={totalPending}
             icon={<CheckInIllustration />}
           />
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
           <BookingWidgetSummary
-            title="Hotspot Users"
+            title="Completed Tasks"
             percent={0}
-            total={totalHotspot}
+            total={totalCompleted}
             icon={<CheckoutIllustration />}
           />
         </Grid>
@@ -93,7 +141,7 @@ export function OverviewBookingView() {
                 }}
               >
                 <BookingTotalIncomes
-                  title="Total users"
+                  title="Total tasks"
                   total={totalActive}
                   percent={2.6}
                   chart={{
@@ -103,8 +151,8 @@ export function OverviewBookingView() {
                 />
 
                 <BookingBooked
-                  title="Status"
-                  data={_bookingsOverview}
+                  title="Task status"
+                  data={_taskOverview}
                   sx={{ boxShadow: { md: 'none' } }}
                 />
               </Box>
@@ -112,8 +160,8 @@ export function OverviewBookingView() {
               <BookingCheckInWidgets
                 chart={{
                   series: [
-                    { label: 'PPoE Users', percent: 73.9, total: 38566 },
-                    { label: 'Hotspot Users', percent: 45.6, total: 18472 },
+                    { label: 'Pending Tasks', percent: (totalPending / totalActive) * 100, total: totalPending },
+                    { label: 'Completed Tasks', percent: (totalCompleted / totalActive) * 100, total: totalCompleted },
                   ],
                 }}
                 sx={{ boxShadow: { md: 'none' } }}
@@ -121,7 +169,7 @@ export function OverviewBookingView() {
             </Box>
 
             <BookingStatistics
-              title="Statistics"
+              title="Task statistics"
               chart={{
                 series: [
                   {
@@ -156,11 +204,11 @@ export function OverviewBookingView() {
           <Grid size={{ xs: 12, md: 5, lg: 4 }}>
             <Box sx={{ gap: 3, display: 'flex', flexDirection: 'column' }}>
               <BookingAvailable
-                title="Tours available"
+                title="Available tasks"
                 chart={{
                   series: [
-                    { label: 'Sold out', value: 120 },
-                    { label: 'Available', value: 66 },
+                    { label: 'Pending', value: totalPending },
+                    { label: 'Available', value: totalActive },
                   ],
                 }}
               />
@@ -176,21 +224,21 @@ export function OverviewBookingView() {
 
         <Grid size={12}>
           <BookingNewest
-            title="Newest booking"
-            subheader={`${_bookingNew.length} bookings`}
+            title="Newest tasks"
+            subheader={`${_bookingNew.length} tasks`}
             list={_bookingNew}
           />
         </Grid>
 
         <Grid size={12}>
           <BookingDetails
-            title="Booking details"
+            title="Task details"
             tableData={_bookings}
             headCells={[
-              { id: 'destination', label: 'Destination' },
-              { id: 'customer', label: 'Customer' },
-              { id: 'checkIn', label: 'Check in' },
-              { id: 'checkOut', label: 'Check out' },
+              { id: 'destination', label: 'Location' },
+              { id: 'customer', label: 'Requester' },
+              { id: 'checkIn', label: 'Start Time' },
+              { id: 'checkOut', label: 'End Time' },
               { id: 'status', label: 'Status' },
               { id: '' },
             ]}

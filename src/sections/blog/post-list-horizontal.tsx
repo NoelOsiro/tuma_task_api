@@ -7,24 +7,25 @@ import { paths } from 'src/routes/paths';
 
 import { PostItemSkeleton } from './post-skeleton';
 import { PostItemHorizontal } from './post-item-horizontal';
+import ITaskItem from 'src/types/task';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  posts: IPostItem[];
+  tasks: ITaskItem[];
   loading?: boolean;
 };
 
-export function PostListHorizontal({ posts, loading }: Props) {
+export function PostListHorizontal({ tasks, loading }: Props) {
   const renderLoading = () => <PostItemSkeleton variant="horizontal" />;
 
   const renderList = () =>
-    posts.map((post) => (
+    tasks.map((task) => (
       <PostItemHorizontal
-        key={post.id}
-        post={post}
-        detailsHref={paths.dashboard.post.details(post.title)}
-        editHref={paths.dashboard.post.edit(post.title)}
+        key={task.id}
+        task={task}
+        detailsHref={paths.dashboard.tasks.details(task.title)}
+        editHref={paths.dashboard.tasks.edit(task.title)}
       />
     ));
 
@@ -40,7 +41,7 @@ export function PostListHorizontal({ posts, loading }: Props) {
         {loading ? renderLoading() : renderList()}
       </Box>
 
-      {posts.length > 8 && (
+      {tasks.length > 8 && (
         <Pagination
           count={8}
           sx={{

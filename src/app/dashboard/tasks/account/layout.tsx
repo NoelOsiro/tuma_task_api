@@ -1,4 +1,4 @@
-import { MainLayout } from 'src/layouts/main';
+import { AccountLayout } from 'src/sections/account/account-layout';
 
 // ----------------------------------------------------------------------
 
@@ -7,5 +7,5 @@ type Props = {
 };
 
 export default function Layout({ children }: Props) {
-  return <MainLayout>{children}</MainLayout>;
+  return <AccountLayout> {children}</AccountLayout>;
 }

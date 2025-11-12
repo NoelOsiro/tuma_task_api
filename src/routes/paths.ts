@@ -34,11 +34,11 @@ export const paths = {
   minimalStore: 'https://mui.com/store/items/minimal-dashboard/',
   freeUI: 'https://mui.com/store/items/minimal-dashboard-free/',
   figmaUrl: 'https://www.figma.com/design/cAPz4pYPtQEXivqe11EcDE/%5BPreview%5D-Minimal-Web.v6.0.0',
-  leave: {
-    root: `/leave`,
-    checkout: `/leave/checkout`,
-    details: (id: string) => `/leave/${id}`,
-    demo: { details: `/leave/${MOCK_ID}` },
+  tasks: {
+    root: `/tasks`,
+    checkout: `/tasks/checkout`,
+    details: (id: string) => `/tasks/${id}`,
+    demo: { details: `/tasks/${MOCK_ID}` },
   },
   post: {
     root: `/post`,
@@ -125,6 +125,17 @@ export const paths = {
       edit: (id: string) => `${ROOTS.DASHBOARD}/customer/${id}/edit`,
       edit2: (id: string) => `${ROOTS.DASHBOARD}/customer/${id}/account`,
       demo: { edit: `${ROOTS.DASHBOARD}/customer/${MOCK_ID}/edit` },
+    },
+    tasks: {
+      root: `${ROOTS.DASHBOARD}/tasks`,
+      new: `${ROOTS.DASHBOARD}/tasks/new`,
+      list: `${ROOTS.DASHBOARD}/tasks/list`,
+      cards: `${ROOTS.DASHBOARD}/tasks/cards`,
+      profile: `${ROOTS.DASHBOARD}/tasks/profile`,
+      account: `${ROOTS.DASHBOARD}/tasks/account`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/tasks/${id}/edit`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/tasks/${id}/details`,
+      demo: { edit: `${ROOTS.DASHBOARD}/tasks/${MOCK_ID}/edit` },
     },
     package: {
       root: `${ROOTS.DASHBOARD}/package`,
@@ -228,6 +239,7 @@ export const paths = {
   product: {
     root: '/product',
     demo: { details: '/product/1' },
+    details: (id: string) => `/product/${id}`,
     checkout: '/product/checkout',
   },
 };

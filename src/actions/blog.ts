@@ -21,7 +21,7 @@ type PostsData = {
 };
 
 export function useGetPosts() {
-  const url = endpoints.post.list;
+  const url = endpoints.tasks.list;
 
   const { data, isLoading, error, isValidating } = useSWR<PostsData>(url, fetcher, swrOptions);
 

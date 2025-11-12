@@ -1,6 +1,6 @@
 'use client';
 
-import type { IPostItem, IPostFilters } from 'src/types/blog';
+import type { ITaskItem, ITaskFilters } from 'src/types/task';
 
 import { orderBy } from 'es-toolkit';
 import { useState, useCallback } from 'react';
@@ -25,21 +25,21 @@ import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import { PostSort } from '../post-sort';
 import { PostSearch } from '../post-search';
 import { PostListHorizontal } from '../post-list-horizontal';
-
+import { useGetTasks } from 'src/actions/task';
 // ----------------------------------------------------------------------
 
 export function PostListView() {
-  const { posts, postsLoading } = useGetPosts();
+  const { tasks, tasksLoading } = useGetTasks();
 
   const [sortBy, setSortBy] = useState('latest');
 
-  const { state, setState } = useSetState<IPostFilters>({ publish: 'all' });
+  const { state, setState } = useSetState<ITaskFilters>({ status: 'open' });
 
-  const dataFiltered = applyFilter({ inputData: posts, filters: state, sortBy });
+  const dataFiltered = applyFilter({ inputData: tasks, filters: state, sortBy });
 
   const handleFilterPublish = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
-      setState({ publish: newValue });
+      setState({ status: newValue });
     },
     [setState]
   );
@@ -85,8 +85,8 @@ export function PostListView() {
         />
       </Box>
 
-      <Tabs value={state.publish} onChange={handleFilterPublish} sx={{ mb: { xs: 3, md: 5 } }}>
-        {['all', 'published', 'draft'].map((tab) => (
+      <Tabs value={state.status} onChange={handleFilterPublish} sx={{ mb: { xs: 3, md: 5 } }}>
+        {['open', 'completed', 'cancelled'].map((tab) => (
           <Tab
             key={tab}
             iconPosition="end"
@@ -94,12 +94,12 @@ export function PostListView() {
             label={tab}
             icon={
               <Label
-                variant={((tab === 'all' || tab === state.publish) && 'filled') || 'soft'}
-                color={(tab === 'published' && 'info') || 'default'}
+                variant={((tab === 'open' || tab === state.status) && 'filled') || 'soft'}
+                color={(tab === 'completed' && 'info') || 'default'}
               >
-                {tab === 'all' && posts.length}
-                {tab === 'published' && posts.filter((post) => post.publish === 'published').length}
-                {tab === 'draft' && posts.filter((post) => post.publish === 'draft').length}
+                {tab === 'open' && tasks.length}
+                {tab === 'completed' && tasks.filter((task) => task.status === 'completed').length}
+                {tab === 'cancelled' && tasks.filter((task) => task.status === 'cancelled').length}
               </Label>
             }
             sx={{ textTransform: 'capitalize' }}
@@ -107,7 +107,7 @@ export function PostListView() {
         ))}
       </Tabs>
 
-      <PostListHorizontal posts={dataFiltered} loading={postsLoading} />
+      <PostListHorizontal tasks={dataFiltered} loading={tasksLoading} />
     </DashboardContent>
   );
 }
@@ -115,28 +115,25 @@ export function PostListView() {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: IPostItem[];
-  filters: IPostFilters;
+  inputData: ITaskItem[];
+  filters: ITaskFilters;
   sortBy: string;
 };
 
 function applyFilter({ inputData, filters, sortBy }: ApplyFilterProps) {
-  const { publish } = filters;
+  const { status } = filters;
 
   if (sortBy === 'latest') {
-    inputData = orderBy(inputData, ['createdAt'], ['desc']);
+    inputData = orderBy(inputData, ['created_at'], ['desc']);
   }
 
   if (sortBy === 'oldest') {
-    inputData = orderBy(inputData, ['createdAt'], ['asc']);
+    inputData = orderBy(inputData, ['created_at'], ['asc']);
   }
 
-  if (sortBy === 'popular') {
-    inputData = orderBy(inputData, ['totalViews'], ['desc']);
-  }
 
-  if (publish !== 'all') {
-    inputData = inputData.filter((post) => post.publish === publish);
+  if (status !== 'open') {
+    inputData = inputData.filter((task) => task.status === status);
   }
 
   return inputData;
