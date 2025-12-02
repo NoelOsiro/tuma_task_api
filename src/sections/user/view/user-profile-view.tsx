@@ -12,7 +12,7 @@ import { RouterLink } from 'src/routes/components';
 import { usePathname, useSearchParams } from 'src/routes/hooks';
 
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _userAbout, _userFeeds, _userFriends, _userGallery, _userFollowers } from 'src/_mock';
+import { _userAbout, _userFeeds, _userFriends, _userGallery, _userFollowers, _mock } from 'src/_mock';
 
 import { Iconify } from 'src/components/iconify';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
@@ -60,7 +60,7 @@ export function UserProfileView() {
   const selectedTab = searchParams.get(TAB_PARAM) ?? '';
 
   const { user } = useAuthContext();
-  const displayName = `${user?.first_name} ${user?.last_name}`;
+  const displayName = `${user?.displayName || 'User'}`;
   const [searchFriends, setSearchFriends] = useState('');
 
   const handleSearchFriends = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,9 +86,9 @@ export function UserProfileView() {
 
       <Card sx={{ mb: 3, height: 290 }}>
         <ProfileCover
-          role={_userAbout.role}
+          role={user?.profile?.role || 'Member'}
           name={displayName}
-          avatarUrl={user?.photoURL}
+          avatarUrl={_mock.image.avatar(2)}
           coverUrl={_userAbout.coverUrl}
         />
 

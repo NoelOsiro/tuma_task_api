@@ -6,7 +6,6 @@ import { useRef, useState } from 'react';
 import { m, useScroll, useSpring, useTransform, useMotionValueEvent } from 'framer-motion';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -49,7 +48,6 @@ export function HomeHero({ sx, ...other }: BoxProps) {
   const y2 = useTransformY(scrollProgress.scrollY, distance * -6);
   const y3 = useTransformY(scrollProgress.scrollY, distance * -5);
   const y4 = useTransformY(scrollProgress.scrollY, distance * -4);
-  const y5 = useTransformY(scrollProgress.scrollY, distance * -3);
 
   const opacity: MotionValue<number> = useTransform(
     scrollProgress.scrollY,
@@ -79,9 +77,9 @@ export function HomeHero({ sx, ...other }: BoxProps) {
         ]}
       >
         <Box component="span" sx={{ width: 1, opacity: 0.24 }}>
-          Experience the future of
+          Need extra cash?
         </Box>
-        internet with
+        Introducing
         <Box
           component={m.span}
           animate={{ backgroundPosition: '200% center' }}
@@ -112,10 +110,20 @@ export function HomeHero({ sx, ...other }: BoxProps) {
         sx={{
           mx: 'auto',
           [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
-          [theme.breakpoints.up(lgKey)]: { fontSize: 20, lineHeight: '36px' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 22, lineHeight: '36px' },
         }}
       >
-        {`Experience lightning-fast internet with 99.9% uptime. \nGet connected today with our affordable and reliable internet plans.`}
+        {` TumaTask hooks you up with quick gigs you can do anytime — house sitting, line waiting, handy work, you name it.`}
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          mx: 'auto',
+          [theme.breakpoints.up(smKey)]: { whiteSpace: 'pre' },
+          [theme.breakpoints.up(lgKey)]: { fontSize: 22, lineHeight: '36px' },
+        }}
+      >
+        Pick a task, pull up, get paid. It’s flexible, fast, and actually safe.
       </Typography>
     </m.div>
   );
@@ -141,7 +149,7 @@ export function HomeHero({ sx, ...other }: BoxProps) {
             />
           ))}
         </AvatarGroup>
-        160+ Happy customers
+        160+ Tasks completed
       </Box>
     </m.div>
   );
@@ -166,7 +174,7 @@ export function HomeHero({ sx, ...other }: BoxProps) {
             startIcon={<Iconify width={24} icon="iconoir:flash" />}
           >
             <span>
-              Live tutorial
+              Get Started
               <Box
                 component="small"
                 sx={{
@@ -181,19 +189,6 @@ export function HomeHero({ sx, ...other }: BoxProps) {
               </Box>
             </span>
           </Button>
-
-          <Link
-            color="inherit"
-            variant="body2"
-            target="_blank"
-            rel="noopener"
-            href={paths.freeUI}
-            underline="always"
-            sx={{ gap: 0.75, alignItems: 'center', display: 'inline-flex' }}
-          >
-            <Iconify width={16} icon="eva:external-link-fill" />
-            Get started
-          </Link>
         </Stack>
       </m.div>
 
@@ -204,8 +199,8 @@ export function HomeHero({ sx, ...other }: BoxProps) {
           variant="outlined"
           target="_blank"
           rel="noopener"
-          href={paths.figmaUrl}
-          startIcon={<Iconify width={24} icon="solar:figma-outline" />}
+          href={paths.auth.supabase.signUp}
+          startIcon={<Iconify width={24} icon="solar:pen-bold" />}
           sx={{ borderColor: 'text.primary' }}
         >
           Sign Up
@@ -214,36 +209,7 @@ export function HomeHero({ sx, ...other }: BoxProps) {
     </Box>
   );
 
-  const renderIcons = () => (
-    <Stack spacing={3} sx={{ textAlign: 'center' }}>
-      <m.div {...motionProps}>
-        <Typography variant="overline" sx={{ opacity: 0.4 }}>
-          Available For
-        </Typography>
-      </m.div>
 
-      <Box sx={{ gap: 2.5, display: 'flex' }}>
-        {['js', 'ts', 'nextjs', 'vite', 'figma'].map((platform) => (
-          <m.div {...motionProps} key={platform}>
-            <Box
-              component="img"
-              alt={platform}
-              src={`${CONFIG.assetsDir}/assets/icons/platforms/ic-${platform}.svg`}
-              sx={[
-                {
-                  width: 24,
-                  height: 24,
-                  ...theme.applyStyles('dark', {
-                    ...(platform === 'nextjs' && { filter: 'invert(1)' }),
-                  }),
-                },
-              ]}
-            />
-          </m.div>
-        ))}
-      </Box>
-    </Stack>
-  );
 
   return (
     <Box
@@ -301,7 +267,6 @@ export function HomeHero({ sx, ...other }: BoxProps) {
 
           <m.div style={{ y: y3 }}>{renderRatings()}</m.div>
           <m.div style={{ y: y4 }}>{renderButtons()}</m.div>
-          <m.div style={{ y: y5 }}>{renderIcons()}</m.div>
         </Container>
 
         <HeroBackground />

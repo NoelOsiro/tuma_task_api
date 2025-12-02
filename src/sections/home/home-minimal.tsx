@@ -33,9 +33,9 @@ export function HomeMinimal({ sx, ...other }: BoxProps) {
   const renderDescription = () => (
     <>
       <SectionTitle
-        caption="Our Services"
-        title="Why Choose"
-        txtGradient="TumaTask?"
+        caption="Need extra cash?"
+        title="TumaTask is a gig marketplace"
+        txtGradient="Flexible, fast, and safe."
         sx={{ mb: { xs: 5, md: 8 }, textAlign: { xs: 'center', md: 'left' } }}
       />
 
@@ -128,22 +128,22 @@ export function HomeMinimal({ sx, ...other }: BoxProps) {
   );
 }
 
-// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------ss
 
 const ITEMS = [
   {
     icon: `${CONFIG.assetsDir}/assets/icons/home/ic-make-brand.svg`,
-    title: 'High-Speed Internet',
-    description: 'Lightning-fast connections with 99.9% uptime for seamless browsing and streaming.',
+    title: 'Localized Tasks',
+    description: 'Get paid to handle local house sitting and simple household gigs.',
   },
   {
     icon: `${CONFIG.assetsDir}/assets/icons/home/ic-design.svg`,
-    title: 'Affordable Plans',
-    description: 'Flexible packages to suit every need and budget, with no hidden fees.',
+    title: 'Handy Work',
+    description: 'Offer quick handy services — from mounting to small repairs.',
   },
   {
     icon: `${CONFIG.assetsDir}/assets/icons/home/ic-development.svg`,
-    title: '24/7 Support',
-    description: 'Our expert team is always ready to assist you with any issues or questions.',
+    title: 'Small Jobs',
+    description: 'Flexible micro-tasks you can complete on your schedule and get paid.',
   },
 ];

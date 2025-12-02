@@ -85,8 +85,9 @@ const renderDescription = () => (
         typography: { xs: 'h2', md: 'h1' },
       }}
     >
-      Get started with
-      <br /> Minimal kit
+      Need extra cash?
+      <br />
+      TumaTask
       <Box
         component="span"
         sx={(theme) => ({
@@ -96,7 +97,7 @@ const renderDescription = () => (
           ml: 1,
         })}
       >
-        today
+        Get paid for small jobs
       </Box>
     </Box>
 
@@ -117,7 +118,7 @@ const renderDescription = () => (
           rel="noopener"
           href={paths.minimalStore}
         >
-          Purchase now
+          Sign Up
         </Button>
       </m.div>
 
@@ -136,7 +137,7 @@ const renderDescription = () => (
             '&:hover': { borderColor: 'currentColor' },
           }}
         >
-          Get free version
+          Learn more
         </Button>
       </m.div>
     </Box>

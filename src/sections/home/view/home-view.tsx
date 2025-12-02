@@ -50,7 +50,7 @@ export function HomeView() {
 
         <HomeIntegrations />
 
-        <HomePricing />
+        {/* <HomePricing /> */}
 
         <HomeTestimonials />
 

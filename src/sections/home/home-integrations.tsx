@@ -45,21 +45,17 @@ const renderLines = () => (
 export function HomeIntegrations({ sx, ...other }: BoxProps) {
   const renderDescription = () => (
     <SectionTitle
-      caption="Seamless Integration"
-      title="Works with all major"
-      txtGradient="networking"
+      caption="Need extra cash?"
+      title="TumaTask"
+      txtGradient="Flexible, fast, and safe."
       description={
         <>
           <Box component="span" sx={{ mb: 1, display: 'block' }}>
-            Comprehensive support for all major networking equipment and payment processors.
+            TumaTask connects task owners with verified taskers for quick local gigs — from house sitting to handy work. Owners enjoy easy hiring, fast payouts, and secure in-app payments.
           </Box>
 
-          <Box
-            component="span"
-            sx={{ fontStyle: 'italic', color: 'text.disabled', typography: 'caption' }}
-          >
-            * RouterOS, MikroTik, Ubiquiti, and Cisco supported.
-            <br />* M-Pesa, bank transfers, and card payments available.
+          <Box component="span" sx={{ fontStyle: 'italic', color: 'text.disabled', typography: 'caption' }}>
+            Tasker verification and transparent ratings keep transactions trustworthy. Secure payments, instant payouts, and built-in dispute support.
           </Box>
         </>
       }

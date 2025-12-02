@@ -115,9 +115,9 @@ export function HomeFAQs({ sx, ...other }: BoxProps) {
 
   const renderDescription = () => (
     <SectionTitle
-      caption="FAQs"
-      title="We’ve got the"
-      txtGradient="answers"
+      caption="Need extra cash?"
+      title="TumaTask FAQs"
+      txtGradient="Get paid for small jobs"
       sx={{ textAlign: 'center' }}
     />
   );
@@ -202,7 +202,7 @@ export function HomeFAQs({ sx, ...other }: BoxProps) {
 
       <m.div variants={varFade('in')}>
         <Typography sx={{ mt: 2, mb: 3, color: 'text.secondary' }}>
-          Please describe your case to receive the most accurate advice
+          Need extra cash? Learn how to sign up, get gigs, and receive payments safely on TumaTask.
         </Typography>
       </m.div>
 

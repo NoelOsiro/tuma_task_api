@@ -30,10 +30,10 @@ export function HomePricing({ sx, ...other }: BoxProps) {
 
   const renderDescription = () => (
     <SectionTitle
-      caption="Internet Plans"
-      title="Affordable"
-      txtGradient="Pricing"
-      description="Choose the perfect internet plan for your needs with transparent pricing in KES. No hidden fees, no surprises."
+      caption="Need extra cash?"
+      title="TumaTask"
+      txtGradient="Flexible gigs"
+      description="Need extra cash? TumaTask is a gig marketplace where you get paid to handle small jobs— from house sitting to handy work. Flexible, fast, and safe."
       sx={{ mb: 8, textAlign: 'center' }}
     />
   );
@@ -274,7 +274,7 @@ function PlanCard({ plan, sx, ...other }: PlanCardProps) {
         </Stack>
 
         <m.div variants={varFade('inUp', { distance: 24 })}>
-          <Button
+            <Button
             fullWidth
             variant={plan.license === 'Premium' ? 'contained' : 'outlined'}
             color="primary"
@@ -283,7 +283,7 @@ function PlanCard({ plan, sx, ...other }: PlanCardProps) {
             rel="noopener"
             href={paths.minimalStore}
           >
-            Subscribe Now
+            Get Started
           </Button>
         </m.div>
       </Box>
