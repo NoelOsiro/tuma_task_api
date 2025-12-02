@@ -1,10 +1,10 @@
 import type { SWRConfiguration } from 'swr';
+import type ITaskItem from 'src/types/task';
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
 import { fetcher, endpoints } from 'src/lib/axios';
-import ITaskItem from 'src/types/task';
 
 
 // ----------------------------------------------------------------------
@@ -17,9 +17,7 @@ const swrOptions: SWRConfiguration = {
 
 // ----------------------------------------------------------------------
 
-type TasksData = {
-  tasks: ITaskItem[];
-};
+type TasksData =  ITaskItem[];
 
 export function useGetTasks() {
   const url = endpoints.tasks.list;
@@ -28,14 +26,14 @@ export function useGetTasks() {
 
   const memoizedValue = useMemo(
     () => ({
-      tasks: data?.tasks || [],
+      tasks: data || [],
       tasksLoading: isLoading,
       tasksError: error,
       taskValidating: isValidating,
   // guard against undefined data.tasks; treat missing array as empty
-  tasksEmpty: !isLoading && (data?.tasks?.length ?? 0) === 0,
+  tasksEmpty: !isLoading && (data?.length ?? 0) === 0,
     }),
-    [data?.tasks, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
@@ -53,12 +51,12 @@ export function useGetTask(id: string) {
 
   const memoizedValue = useMemo(
     () => ({
-      task: data?.task ?? (data as any)?.data ?? null,
+      task: data?? (data as any)?.data ?? null,
       taskLoading: isLoading,
       taskError: error,
       taskValidating: isValidating,
     }),
-    [data?.task, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;

@@ -1,4 +1,4 @@
-import type { IPostItem } from 'src/types/blog';
+import type ITaskItem from 'src/types/task';
 import type { CardProps } from '@mui/material/Card';
 
 import { usePopover } from 'minimal-shared/hooks';
@@ -18,11 +18,12 @@ import { RouterLink } from 'src/routes/components';
 import { fDate } from 'src/utils/format-time';
 import { fShortenNumber } from 'src/utils/format-number';
 
+import { _mock } from 'src/_mock';
+
 import { Label } from 'src/components/label';
 import { Image } from 'src/components/image';
 import { Iconify } from 'src/components/iconify';
 import { CustomPopover } from 'src/components/custom-popover';
-import ITaskItem from 'src/types/task';
 
 // ----------------------------------------------------------------------
 
@@ -171,7 +172,7 @@ export function PostItemHorizontal({ sx, task, editHref, detailsHref, ...other }
         >
           <Avatar
             alt="Noel Osiro"
-            src={task.author.avatarUrl}
+            src={_mock.image.avatar(3)}
             sx={{
               top: 16,
               right: 16,
@@ -179,7 +180,7 @@ export function PostItemHorizontal({ sx, task, editHref, detailsHref, ...other }
               position: 'absolute',
             }}
           />
-          <Image alt={task.title} src={task.coverUrl} sx={{ height: 1, borderRadius: 1.5 }} />
+          <Image alt={task.title} src={_mock.image.cover(3)} sx={{ height: 1, borderRadius: 1.5 }} />
         </Box>
       </Card>
 

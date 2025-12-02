@@ -1,4 +1,5 @@
-import type { IPostItem } from 'src/types/blog';
+
+import type ITaskItem from 'src/types/task';
 
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
@@ -7,7 +8,6 @@ import { paths } from 'src/routes/paths';
 
 import { PostItemSkeleton } from './post-skeleton';
 import { PostItemHorizontal } from './post-item-horizontal';
-import ITaskItem from 'src/types/task';
 
 // ----------------------------------------------------------------------
 
@@ -24,8 +24,8 @@ export function PostListHorizontal({ tasks, loading }: Props) {
       <PostItemHorizontal
         key={task.id}
         task={task}
-        detailsHref={paths.dashboard.tasks.details(task.title)}
-        editHref={paths.dashboard.tasks.edit(task.title)}
+        detailsHref={paths.dashboard.tasks.details(task.id)}
+        editHref={paths.dashboard.tasks.edit(task.id)}
       />
     ));
 

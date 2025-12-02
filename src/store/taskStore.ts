@@ -1,9 +1,11 @@
+import type { ITaskItem } from 'src/types/task';
+
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 import axios, { endpoints } from 'src/lib/axios';
+
 import { JWT_STORAGE_KEY } from 'src/auth/context/jwt/constant';
-import type { ITaskItem } from 'src/types/task';
 
 type TaskItem = ITaskItem;
 

@@ -15,7 +15,7 @@ import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { POST_SORT_OPTIONS } from 'src/_mock';
-import { useGetPosts } from 'src/actions/blog';
+import { useGetTasks } from 'src/actions/task';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Label } from 'src/components/label';
@@ -25,17 +25,18 @@ import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import { PostSort } from '../post-sort';
 import { PostSearch } from '../post-search';
 import { PostListHorizontal } from '../post-list-horizontal';
-import { useGetTasks } from 'src/actions/task';
 // ----------------------------------------------------------------------
 
 export function PostListView() {
   const { tasks, tasksLoading } = useGetTasks();
 
+  const tasksList = Array.isArray(tasks) ? tasks : (tasks && Array.isArray((tasks as any).data) ? (tasks as any).data : []);
+
   const [sortBy, setSortBy] = useState('latest');
 
   const { state, setState } = useSetState<ITaskFilters>({ status: 'open' });
 
-  const dataFiltered = applyFilter({ inputData: tasks, filters: state, sortBy });
+  const dataFiltered = applyFilter({ inputData: tasksList, filters: state, sortBy });
 
   const handleFilterPublish = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
@@ -50,7 +51,7 @@ export function PostListView() {
         heading="List"
         links={[
           { name: 'Dashboard', href: paths.dashboard.root },
-          { name: 'Blog', href: paths.dashboard.post.root },
+          { name: 'Tasks', href: paths.dashboard.tasks.root },
           { name: 'List' },
         ]}
         action={
@@ -60,7 +61,7 @@ export function PostListView() {
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >
-            New post
+            New Task
           </Button>
         }
         sx={{ mb: { xs: 3, md: 5 } }}
@@ -76,7 +77,7 @@ export function PostListView() {
           alignItems: { xs: 'flex-end', sm: 'center' },
         }}
       >
-        <PostSearch redirectPath={(title: string) => paths.dashboard.post.details(title)} />
+        <PostSearch redirectPath={(id: string) => paths.dashboard.post.details(id)} />
 
         <PostSort
           sort={sortBy}
@@ -97,9 +98,9 @@ export function PostListView() {
                 variant={((tab === 'open' || tab === state.status) && 'filled') || 'soft'}
                 color={(tab === 'completed' && 'info') || 'default'}
               >
-                {tab === 'open' && tasks.length}
-                {tab === 'completed' && tasks.filter((task) => task.status === 'completed').length}
-                {tab === 'cancelled' && tasks.filter((task) => task.status === 'cancelled').length}
+                {tab === 'open' && tasksList.length}
+                {tab === 'completed' && tasksList.filter((task:ITaskItem) => task.status === 'completed').length}
+                {tab === 'cancelled' && tasksList.filter((task:ITaskItem) => task.status === 'cancelled').length}
               </Label>
             }
             sx={{ textTransform: 'capitalize' }}

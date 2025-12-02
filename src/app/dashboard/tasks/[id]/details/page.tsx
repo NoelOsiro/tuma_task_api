@@ -2,21 +2,21 @@ import type { Metadata } from 'next';
 
 import { CONFIG } from 'src/global-config';
 
-import { AccountGeneralView } from 'src/sections/customer/view';
+import TaskGeneralView from 'src/sections/tasks/view/task-general-view';
+
 
 // ----------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: `Account general settings | Dashboard - ${CONFIG.appName}`,
+  title: `Task | Dashboard - ${CONFIG.appName}`,
 };
 
 type Props = {
   params: { id: string };
 };
 
-import { _customerList } from 'src/_mock/_customerList';
 
 export default function Page({ params }: Props) {
   const { id } = params;
-  return <AccountGeneralView id={id} />;
+  return <TaskGeneralView id={id} />;
 }

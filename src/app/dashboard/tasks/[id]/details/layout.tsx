@@ -1,4 +1,5 @@
-import { AccountLayout } from 'src/sections/customer/account-layout';
+
+import { TasksLayout } from 'src/sections/tasks/task-layout';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -7,7 +8,7 @@ type LayoutProps = {
 
 const AccountLayoutWrapper = async ({ children, params }: LayoutProps) => {
   const { id } = params;
-  return <AccountLayout customerId={id}>{children}</AccountLayout>;
+  return <TasksLayout customerId={id}>{children}</TasksLayout>;
 };
 
 export default AccountLayoutWrapper;
