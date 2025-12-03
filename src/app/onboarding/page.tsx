@@ -1,32 +1,33 @@
 "use client";
 
-import { useState, useCallback, useEffect } from 'react';
 import { z as zod } from 'zod';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Button from '@mui/material/Button';
-import LoadingButton from '@mui/lab/LoadingButton';
-import Typography from '@mui/material/Typography';
-import Alert from '@mui/material/Alert';
-import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
+import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Stepper from '@mui/material/Stepper';
+import StepLabel from '@mui/material/StepLabel';
+import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import { Form } from 'src/components/hook-form/form-provider';
-import { Field } from 'src/components/hook-form/fields';
-import { RHFPhoneInput } from 'src/components/hook-form/rhf-phone-input';
-import { RHFUploadAvatar } from 'src/components/hook-form/rhf-upload';
-
-import axios from 'src/lib/axios';
-import { toast } from 'src/components/snackbar';
-import { useAuthContext } from 'src/auth/hooks/use-auth-context';
-import { useRouter } from 'next/navigation';
 import { CONFIG } from 'src/global-config';
 import { AuthCenteredLayout } from 'src/layouts/auth-centered/layout';
+
+import { toast } from 'src/components/snackbar';
+import { Form } from 'src/components/hook-form/form-provider';
+
+import { KYCStep } from 'src/sections/onboarding/kyc-step';
+import { PhoneStep } from 'src/sections/onboarding/phone-step';
+import { AvatarStep } from 'src/sections/onboarding/avatar-step';
+
+import { useAuthContext } from 'src/auth/hooks/use-auth-context';
 
 const STEPS = ['KYC', 'Phone', 'Avatar'];
 
@@ -177,26 +178,11 @@ export default function OnboardingPage() {
 
             <Form methods={methods} onSubmit={onSubmit}>
               <Box sx={{ p: { xs: 1, md: 2 }, mb: 1, minHeight: { xs: 220, md: 320 }, display: 'flex', flexDirection: 'column', gap: 3, maxWidth: { xs: '100%', md: 760 }, mx: 'auto' }}>
-                {activeStep === 0 && (
-                  <>
-                    <Typography variant="subtitle1">Tell us your full name</Typography>
-                    <Field.Text name="stepOne.fullName" label="Full name" variant="filled" />
-                  </>
-                )}
+                {activeStep === 0 && <KYCStep />}
 
-                {activeStep === 1 && (
-                  <>
-                    <Typography variant="subtitle1">Add your phone number</Typography>
-                    <RHFPhoneInput name="stepTwo.phone" />
-                  </>
-                )}
+                {activeStep === 1 && <PhoneStep />}
 
-                {activeStep === 2 && (
-                  <>
-                    <Typography variant="subtitle1">Upload an avatar</Typography>
-                    <RHFUploadAvatar name="stepThree.avatar" slotProps={{ wrapper: { sx: { display: 'flex', justifyContent: 'center' } } }} />
-                  </>
-                )}
+                {activeStep === 2 && <AvatarStep />}
 
                 {completed && (
                   <Box sx={{ textAlign: 'center' }}>
