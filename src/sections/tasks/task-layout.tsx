@@ -19,8 +19,8 @@ import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 // ----------------------------------------------------------------------
 
 
-function getNavItems(customerId: string) {
-  const base = `${paths.dashboard.customer.root}/${customerId}/account`;
+function getNavItems(taskId: string) {
+  const base = `${paths.dashboard.tasks.root}/${taskId}/details`;
   return [
     {
       label: 'General',
@@ -28,14 +28,14 @@ function getNavItems(customerId: string) {
       href: base,
     },
     {
-      label: 'Billing',
+      label: 'Details',
       icon: <Iconify width={24} icon="solar:bill-list-bold" />,
       href: `${base}/billing`,
     },
     {
-      label: 'Notifications',
+      label: 'Bids',
       icon: <Iconify width={24} icon="solar:bell-bing-bold" />,
-      href: `${base}/notifications`,
+      href: `${base}/bids`,
     },
     {
       label: 'Social links',

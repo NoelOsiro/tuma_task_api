@@ -24,8 +24,10 @@ type Props = {
 export function AccountBilling({ cards, plans, invoices, addressBook }: Props) {
   return (
     <Grid container spacing={5}>
-      <Grid size={{ xs: 12, md: 8 }}>
+      <Grid size={{ xs: 12, md: 12 }}>
         <AccountBillingPlan plans={plans} cardList={cards} addressBook={addressBook} />
+      </Grid>
+      <Grid size={{ xs: 12, md: 8 }}>
         <AccountBillingPayment cards={cards} />
         <AccountBillingAddress addressBook={addressBook} />
       </Grid>

@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 
 import { CONFIG } from 'src/global-config';
 
-import { AccountNotificationsView } from 'src/sections/account/view';
+import { BidNotifications } from 'src/sections/tasks/bid-notifications';
 
 // ----------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: `Account notifications settings | Dashboard - ${CONFIG.appName}`,
+  title: `Task Bid | Dashboard - ${CONFIG.appName}`,
 };
-
+  
 export default function Page() {
-  return <AccountNotificationsView />;
+  return <BidNotifications />;
 }

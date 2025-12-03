@@ -1,3 +1,4 @@
+'use client';
 
 import type ITaskItem from 'src/types/task';
 
@@ -22,8 +23,6 @@ import { useTaskStore } from 'src/store/taskStore';
 import { toast } from 'src/components/snackbar';
 import { Form, Field } from 'src/components/hook-form';
 
-import { useMockedUser } from 'src/auth/hooks';
-
 // ----------------------------------------------------------------------
 
 export type UpdateTaskSchemaType = zod.infer<typeof UpdateTaskSchema>;
@@ -35,8 +34,11 @@ export const UpdateTaskSchema = zod.object({
   status: zod
     .enum(['open', 'assigned', 'in_progress', 'completed', 'cancelled'])
     .optional(),
-  reward: zod.number().optional().nullable(),
-  location: zod.any().optional().nullable(),
+  reward: zod.preprocess((val) => {
+    if (val === '' || val == null) return undefined;
+    return Number(val);
+  }, zod.number().optional().nullable()),
+  location: zod.preprocess((val) => (val === '' ? undefined : val), zod.any().optional().nullable()),
   // Keep an optional photo field for task image (avatar component remains)
   photoURL: zod.any().optional().nullable(),
 });
@@ -50,7 +52,6 @@ type TaskGeneralProps = {
 };
 
 export function TaskGeneral({ task }: TaskGeneralProps) {
-  const { user } = useMockedUser();
   const tasks = useTaskStore((state) => state.tasks);
 
   // If task prop is provided, try to find the latest from store by id
@@ -68,32 +69,35 @@ export function TaskGeneral({ task }: TaskGeneralProps) {
     return `/assets/images/mock/avatar/avatar-${randomIndex}.webp`;
   }
 
-  const currentTask: UpdateTaskSchemaType = storeTask
+  // Normalize values so inputs don't receive `null` (React warns when `value` is null)
+  const currentTask: UpdateTaskSchemaType = (storeTask
     ? {
         title: storeTask.title,
         description: storeTask.description || '',
         status: (storeTask.status as any) || 'open',
-        reward: storeTask.reward || null,
-        location: storeTask.location || null,
+        // keep reward as number when present, otherwise empty string for the input
+        reward: (storeTask.reward ?? '') as any,
+        // location shown as string input (JSON) or empty string
+        location: (storeTask.location ?? '') as any,
         photoURL: getAvatarUrl(storeTask),
       }
     : {
         title: '',
         description: '',
         status: 'open',
-        reward: null,
-        location: null,
-        photoURL: null,
-      };
+        reward: '' as any,
+        location: '' as any,
+        photoURL: undefined,
+      }) as UpdateTaskSchemaType;
 
-  const defaultValues: UpdateTaskSchemaType = {
-    title: '',
-    description: '',
-    status: 'open',
-    reward: null,
-    location: null,
-    photoURL: null,
-  };
+  // const defaultValues: UpdateTaskSchemaType = {
+  //   title: '',
+  //   description: '',
+  //   status: 'open',
+  //   reward: '' as any,
+  //   location: '' as any,
+  //   photoURL: undefined,
+  // };
 
   const methods = useForm<UpdateTaskSchemaType>({
     mode: 'all',
