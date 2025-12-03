@@ -1,33 +1,34 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid2';
+import { Button } from '@mui/material';
 
-import { DashboardContent } from 'src/layouts/dashboard';
-import { _bookings, _bookingNew, _bookingReview, _bookingsOverview, _appFeatured } from 'src/_mock';
 import { fetcher, endpoints } from 'src/lib/axios';
+import { DashboardContent } from 'src/layouts/dashboard';
+import { _bookings, _bookingNew, _appFeatured, _bookingReview } from 'src/_mock';
 import {
+  SeoIllustration,
   BookingIllustration,
   CheckInIllustration,
   CheckoutIllustration,
-  SeoIllustration,
 } from 'src/assets/illustrations';
+
+import { useAuthContext } from 'src/auth/hooks/use-auth-context';
 
 import { BookingBooked } from '../booking-booked';
 import { BookingNewest } from '../booking-newest';
+import { AppWelcome } from '../../app/app-welcome';
 import { BookingDetails } from '../booking-details';
+import { AppFeatured } from '../../app/app-featured';
 import { BookingAvailable } from '../booking-available';
 import { BookingStatistics } from '../booking-statistics';
 import { BookingTotalIncomes } from '../booking-total-incomes';
 import { BookingWidgetSummary } from '../booking-widget-summary';
 import { BookingCheckInWidgets } from '../booking-check-in-widgets';
 import { BookingCustomerReviews } from '../booking-customer-reviews';
-import { Button } from '@mui/material';
-import { AppWelcome } from '../../app/app-welcome';
-import { useAuthContext } from 'src/auth/hooks/use-auth-context';
-import { AppFeatured } from '../../app/app-featured';
 
 // ----------------------------------------------------------------------
 
@@ -42,8 +43,24 @@ export function OverviewBookingView() {
       setLoading(true);
       try {
         const data = await fetcher(endpoints.tasks.list);
-        // `fetcher` returns the whole response data shape; the API returns { data: [...] }
-        const items = data?.data ?? data ?? [];
+        // `fetcher` returns the response payload. Normalize possible shapes to an array.
+        // Common shapes: [] | { data: [] } | { results: [] } | unexpected object or string
+        let items: any[] = [];
+        if (Array.isArray(data)) {
+          items = data;
+        } else if (Array.isArray(data?.data)) {
+          items = data.data;
+        } else if (Array.isArray(data?.results)) {
+          items = data.results;
+        } else {
+          // fallback: if data itself looks like a single item, wrap it
+          if (data && typeof data === 'object' && (data.id || data.title)) {
+            items = [data];
+          } else {
+            items = [];
+          }
+        }
+
         if (mounted) setTasks(items);
       } catch (err) {
         console.warn('[overview] failed to load tasks, falling back to mock data', err);
@@ -58,17 +75,19 @@ export function OverviewBookingView() {
     return () => {
       mounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
-  const totalActive = tasks.length
-  const totalPending = tasks.filter((t) => t.status === 'open' || t.status === 'assigned').length || 0;
-  const totalCompleted = tasks.filter((t) => t.status === 'completed').length || 0;
+  const totalActive = Array.isArray(tasks) ? tasks.length : 0;
+  const totalPending = Array.isArray(tasks)
+    ? tasks.filter((t) => t.status === 'open' || t.status === 'assigned').length
+    : 0;
+  const totalCompleted = Array.isArray(tasks) ? tasks.filter((t) => t.status === 'completed').length : 0;
   const _taskOverview = [
-    { status: 'open', value: tasks.filter((t) => t.status === 'open').length, quantity: tasks.filter((t) => t.status === 'open').length },
-    { status: 'assigned', value: tasks.filter((t) => t.status === 'assigned').length, quantity: tasks.filter((t) => t.status === 'assigned').length },
-    { status: 'in_progress', value: tasks.filter((t) => t.status === 'in_progress').length, quantity: tasks.filter((t) => t.status === 'in_progress').length },
-    { status: 'completed', value: tasks.filter((t) => t.status === 'completed').length, quantity: tasks.filter((t) => t.status === 'completed').length },
+    { status: 'open', value: Array.isArray(tasks) ? tasks.filter((t) => t.status === 'open').length : 0, quantity: Array.isArray(tasks) ? tasks.filter((t) => t.status === 'open').length : 0 },
+    { status: 'assigned', value: Array.isArray(tasks) ? tasks.filter((t) => t.status === 'assigned').length : 0, quantity: Array.isArray(tasks) ? tasks.filter((t) => t.status === 'assigned').length : 0 },
+    { status: 'in_progress', value: Array.isArray(tasks) ? tasks.filter((t) => t.status === 'in_progress').length : 0, quantity: Array.isArray(tasks) ? tasks.filter((t) => t.status === 'in_progress').length : 0 },
+    { status: 'completed', value: Array.isArray(tasks) ? tasks.filter((t) => t.status === 'completed').length : 0, quantity: Array.isArray(tasks) ? tasks.filter((t) => t.status === 'completed').length : 0 },
   ];
 
   return (
