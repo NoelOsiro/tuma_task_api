@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid2';
 import { Button } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
 
 import { fetcher, endpoints } from 'src/lib/axios';
 import { DashboardContent } from 'src/layouts/dashboard';
@@ -32,6 +34,18 @@ import { BookingCustomerReviews } from '../booking-customer-reviews';
 
 // ----------------------------------------------------------------------
 
+function WidgetSkeleton() {
+  return (
+    <Card sx={{ p: 2, pl: 3, display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ flexGrow: 1 }}>
+        <Skeleton variant="text" width="60%" sx={{ mb: 1 }} />
+        <Skeleton variant="text" width="40%" height={32} />
+      </Box>
+      <Skeleton variant="circular" width={64} height={64} sx={{ ml: 2, flexShrink: 0 }} />
+    </Card>
+  );
+}
+
 export function OverviewBookingView() {
   const { user } = useAuthContext();
   const [tasks, setTasks] = useState<any[]>([]);
@@ -43,24 +57,9 @@ export function OverviewBookingView() {
       setLoading(true);
       try {
         const data = await fetcher(endpoints.tasks.list);
-        // `fetcher` returns the response payload. Normalize possible shapes to an array.
-        // Common shapes: [] | { data: [] } | { results: [] } | unexpected object or string
-        let items: any[] = [];
-        if (Array.isArray(data)) {
-          items = data;
-        } else if (Array.isArray(data?.data)) {
-          items = data.data;
-        } else if (Array.isArray(data?.results)) {
-          items = data.results;
-        } else {
-          // fallback: if data itself looks like a single item, wrap it
-          if (data && typeof data === 'object' && (data.id || data.title)) {
-            items = [data];
-          } else {
-            items = [];
-          }
-        }
-
+        // The fetcher returns the tasks array in this project (or { data: [...] }).
+        // Use the array directly when available, otherwise fall back to data.data.
+        const items: any[] = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
         if (mounted) setTasks(items);
       } catch (err) {
         console.warn('[overview] failed to load tasks, falling back to mock data', err);
@@ -110,30 +109,42 @@ export function OverviewBookingView() {
           <AppFeatured list={_appFeatured} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <BookingWidgetSummary
-            title="Total Active Tasks"
-            percent={0}
-            total={totalActive}
-            icon={<BookingIllustration />}
-          />
+          {loading ? (
+            <WidgetSkeleton />
+          ) : (
+            <BookingWidgetSummary
+              title="Total Active Tasks"
+              percent={0}
+              total={totalActive}
+              icon={<BookingIllustration />}
+            />
+          )}
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <BookingWidgetSummary
-            title="Pending Tasks"
-            percent={0}
-            total={totalPending}
-            icon={<CheckInIllustration />}
-          />
+          {loading ? (
+            <WidgetSkeleton />
+          ) : (
+            <BookingWidgetSummary
+              title="Pending Tasks"
+              percent={0}
+              total={totalPending}
+              icon={<CheckInIllustration />}
+            />
+          )}
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <BookingWidgetSummary
-            title="Completed Tasks"
-            percent={0}
-            total={totalCompleted}
-            icon={<CheckoutIllustration />}
-          />
+          {loading ? (
+            <WidgetSkeleton />
+          ) : (
+            <BookingWidgetSummary
+              title="Completed Tasks"
+              percent={0}
+              total={totalCompleted}
+              icon={<CheckoutIllustration />}
+            />
+          )}
         </Grid>
 
         <Grid container size={12}>
@@ -226,7 +237,7 @@ export function OverviewBookingView() {
                 title="Available tasks"
                 chart={{
                   series: [
-                    { label: 'Pending', value: totalPending },
+                    { label: 'Pending', value: totalCompleted },
                     { label: 'Available', value: totalActive },
                   ],
                 }}
