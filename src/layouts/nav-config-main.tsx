@@ -9,23 +9,34 @@ import type { NavMainProps } from './main/nav/types';
 // ----------------------------------------------------------------------
 
 export const navData: NavMainProps['data'] = [
-  { title: 'Home', path: '/', icon: <Iconify width={22} icon="solar:home-2-bold-duotone" /> },
+  // { title: 'Home', path: '/', icon: <Iconify width={22} icon="solar:home-2-bold-duotone" /> },
   {
-    title: 'Components',
+    title: 'My Tasks',
     path: paths.components,
     icon: <Iconify width={22} icon="solar:atom-bold-duotone" />,
   },
   {
-    title: 'Pages',
+    title: 'TumaTask',
     path: '/pages',
     icon: <Iconify width={22} icon="solar:file-bold-duotone" />,
     children: [
       {
-        subheader: 'Other',
+        subheader: 'About',
         items: [
           { title: 'About us', path: paths.about },
           { title: 'Contact us', path: paths.contact },
+        ],
+      },
+      {
+        subheader: 'Support',
+        items: [
+          { title: 'Contact us', path: paths.contact },
           { title: 'FAQs', path: paths.faqs },
+        ],
+      },
+      {
+        subheader: 'Payments',
+        items: [
           { title: 'Pricing', path: paths.pricing },
           { title: 'Payment', path: paths.payment },
         ],
@@ -55,5 +66,10 @@ export const navData: NavMainProps['data'] = [
       // },
       { subheader: 'Dashboard', items: [{ title: 'Dashboard', path: CONFIG.auth.redirectPath }] },
     ],
+  },
+  {
+    title: 'Community',
+    path: paths.components,
+    icon: <Iconify width={22} icon="solar:atom-bold-duotone" />,
   },
 ];

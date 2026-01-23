@@ -22,10 +22,6 @@
     "tsc:watch": "tsc --noEmit --watch",
     "tsc:print": "npx tsc --showConfig"
   },
-  "engines": {
-    "node": "20.x"
-  },
-  "packageManager": "yarn@1.22.22",
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@dnd-kit/core": "^6.3.1",
