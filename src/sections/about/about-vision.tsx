@@ -110,7 +110,7 @@ export function AboutVision({ sx, ...other }: BoxProps) {
           variant="h3"
           sx={{ textAlign: 'center', maxWidth: 800, mx: 'auto' }}
         >
-          Our vision offering the best product nulla vehicula tortor scelerisque ultrices malesuada.
+          Our vision is to empower every Kenyan to earn flexible income through trusted local tasks, creating opportunities where none existed before.
         </Typography>
       </Container>
     </Box>

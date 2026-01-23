@@ -3,7 +3,6 @@ import type { IDateValue } from 'src/types/common';
 
 import { m } from 'framer-motion';
 import { varAlpha } from 'minimal-shared/utils';
-
 import Box from '@mui/material/Box';
 import Masonry from '@mui/lab/Masonry';
 import Grid from '@mui/material/Grid2';
@@ -13,12 +12,8 @@ import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
-
 import { fDate } from 'src/utils/format-time';
-
-import { _testimonials } from 'src/_mock';
 import { CONFIG } from 'src/global-config';
-
 import { Iconify } from 'src/components/iconify';
 import { varFade, MotionViewport } from 'src/components/animate';
 
@@ -27,7 +22,7 @@ import { varFade, MotionViewport } from 'src/components/animate';
 export function AboutTestimonials({ sx, ...other }: BoxProps) {
   const renderLink = () => (
     <Button color="primary" endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}>
-      Read more
+      View all stories
     </Button>
   );
 
@@ -35,22 +30,20 @@ export function AboutTestimonials({ sx, ...other }: BoxProps) {
     <Box sx={{ maxWidth: { md: 360 }, textAlign: { xs: 'center', md: 'unset' } }}>
       <m.div variants={varFade('inUp')}>
         <Typography variant="overline" sx={{ color: 'common.white', opacity: 0.48 }}>
-          Testimonials
+          Success Stories
         </Typography>
       </m.div>
 
       <m.div variants={varFade('inUp')}>
         <Typography variant="h2" sx={{ my: 3, color: 'common.white' }}>
-          Who love <br />
-          my work
+          Real Kenyans <br />
+          Earning Daily
         </Typography>
       </m.div>
 
       <m.div variants={varFade('inUp')}>
         <Typography sx={{ color: 'common.white' }}>
-          Our goal is to create a product and service that you’re satisfied with and use it every
-          day. This is why we’re constantly working on our services to make it better every day and
-          really listen to what our users has to say.
+          Join thousands of Kenyans who are already earning money through TumaTask. From students to parents, discover how flexible task opportunities are transforming lives across the country.
         </Typography>
       </m.div>
 
@@ -76,7 +69,7 @@ export function AboutTestimonials({ sx, ...other }: BoxProps) {
       ]}
     >
       <Masonry spacing={3} columns={{ xs: 1, md: 2 }} sx={{ ml: 0 }}>
-        {_testimonials.map((testimonial) => (
+        {TUMATASK_TESTIMONIALS.map((testimonial) => (
           <m.div key={testimonial.name} variants={varFade('inUp')}>
             <TestimonialItem testimonial={testimonial} />
           </m.div>
@@ -132,9 +125,7 @@ export function AboutTestimonials({ sx, ...other }: BoxProps) {
     </Box>
   );
 }
-
 // ----------------------------------------------------------------------
-
 type TestimonialItemProps = BoxProps & {
   testimonial: {
     name: string;
@@ -189,3 +180,34 @@ function TestimonialItem({ testimonial, sx, ...other }: TestimonialItemProps) {
     </Box>
   );
 }
+// ----------------------------------------------------------------------
+const TUMATASK_TESTIMONIALS = [
+  {
+    name: 'Grace Wanjiru',
+    content: 'TumaTask changed my life! I make KES 3,000 daily delivering packages in Nairobi. The flexibility allows me to study and support my family.',
+    avatarUrl: `${CONFIG.assetsDir}/assets/images/mock/avatar/avatar-1.webp`,
+    ratingNumber: 5,
+    postedDate: '2024-01-15T10:30:00Z',
+  },
+  {
+    name: 'Samuel Ochieng',
+    content: 'As a university student, TumaTask helps me pay my fees. I do digital tasks in my free time and earn enough to cover my expenses.',
+    avatarUrl: `${CONFIG.assetsDir}/assets/images/mock/avatar/avatar-2.webp`,
+    ratingNumber: 5,
+    postedDate: '2024-01-10T14:20:00Z',
+  },
+  {
+    name: 'Faith Kamau',
+    content: 'I was unemployed for months until I found TumaTask. Now I clean homes and earn KES 25,000 monthly. The platform is safe and reliable.',
+    avatarUrl: `${CONFIG.assetsDir}/assets/images/mock/avatar/avatar-3.webp`,
+    ratingNumber: 4,
+    postedDate: '2024-01-08T09:15:00Z',
+  },
+  {
+    name: 'David Mutua',
+    content: 'The handyman services on TumaTask keep me busy. I\'ve built a good client base and now earn more than I did at my previous job.',
+    avatarUrl: `${CONFIG.assetsDir}/assets/images/mock/avatar/avatar-4.webp`,
+    ratingNumber: 5,
+    postedDate: '2024-01-05T16:45:00Z',
+  },
+];

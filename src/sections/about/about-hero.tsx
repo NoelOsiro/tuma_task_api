@@ -21,7 +21,7 @@ export function AboutHero({ sx, ...other }: BoxProps) {
           ...theme.mixins.bgGradient({
             images: [
               `url(${CONFIG.assetsDir}/assets/background/overlay.svg)`,
-              `url(${CONFIG.assetsDir}/assets/images/about/hero.webp)`,
+              `url(${CONFIG.assetsDir}/assets/images/about/hero.png)`,
             ],
           }),
           height: { md: 560 },
@@ -44,7 +44,7 @@ export function AboutHero({ sx, ...other }: BoxProps) {
           <AnimateText
             component="h1"
             variant="h1"
-            textContent={['Who', 'we are?']}
+            textContent={['Get', 'Paid for Tasks']}
             variants={varFade('inRight', { distance: 24 })}
             sx={{
               color: 'common.white',
@@ -59,8 +59,8 @@ export function AboutHero({ sx, ...other }: BoxProps) {
               variant="h4"
               sx={{ mt: 3, color: 'common.white', fontWeight: 'fontWeightSemiBold' }}
             >
-              Let&apos;s work together and
-              <br /> make awesome site easily
+              Find local odd jobs, earn quickly,
+              <br /> and get paid safely in Kenya
             </Typography>
           </m.div>
         </Box>

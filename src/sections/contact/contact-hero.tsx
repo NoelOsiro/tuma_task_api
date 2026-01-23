@@ -45,7 +45,7 @@ export function ContactHero({ sx, ...other }: BoxProps) {
           <AnimateText
             component="h1"
             variant="h1"
-            textContent={['Where', 'to find us?']}
+            textContent={['Contact', 'TumaTask']}
             variants={varFade('inUp', { distance: 24 })}
             sx={{
               color: 'common.white',
@@ -92,23 +92,23 @@ export function ContactHero({ sx, ...other }: BoxProps) {
 
 const CONTACTS = [
   {
-    country: 'Bali',
-    address: '508 Bridle Avenue Newnan, GA 30263',
-    phoneNumber: '(239) 555-0108',
+    country: 'Nairobi',
+    address: 'Moi Avenue, Nairobi CBD',
+    phoneNumber: '+254 700 123456',
   },
   {
-    country: 'London',
-    address: '508 Bridle Avenue Newnan, GA 30263',
-    phoneNumber: '(319) 555-0115',
+    country: 'Mombasa',
+    address: 'Digo Road, Mombasa',
+    phoneNumber: '+254 711 234567',
   },
   {
-    country: 'Prague',
-    address: '508 Bridle Avenue Newnan, GA 30263',
-    phoneNumber: '(252) 555-0126',
+    country: 'Kisumu',
+    address: 'Oginga Odinga Street, Kisumu',
+    phoneNumber: '+254 722 345678',
   },
   {
-    country: 'Moscow',
-    address: '508 Bridle',
-    phoneNumber: '(307) 555-0133',
+    country: 'Nakuru',
+    address: 'Kenyatta Avenue, Nakuru',
+    phoneNumber: '+254 733 456789',
   },
 ];
