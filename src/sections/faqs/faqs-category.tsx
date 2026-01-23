@@ -16,25 +16,25 @@ import { Iconify } from 'src/components/iconify';
 
 const CATEGORIES = [
   {
-    label: 'Managing your account',
+    label: 'Setting up your account',
     icon: `${CONFIG.assetsDir}/assets/icons/faqs/ic-account.svg`,
     href: '#',
   },
-  { label: 'Payment', icon: `${CONFIG.assetsDir}/assets/icons/faqs/ic-payment.svg`, href: '#' },
+  { label: 'Payments', icon: `${CONFIG.assetsDir}/assets/icons/faqs/ic-payment.svg`, href: '#' },
+  {
+    label: 'Guarantees and assurances',
+    icon: `${CONFIG.assetsDir}/assets/icons/faqs/ic-assurances.svg`,
+    href: '#',
+  },
   { label: 'Delivery', icon: `${CONFIG.assetsDir}/assets/icons/faqs/ic-delivery.svg`, href: '#' },
   {
-    label: 'Problem with the product',
+    label: 'Problem with the product/service',
     icon: `${CONFIG.assetsDir}/assets/icons/faqs/ic-package.svg`,
     href: '#',
   },
   {
     label: 'Return & refund',
     icon: `${CONFIG.assetsDir}/assets/icons/faqs/ic-refund.svg`,
-    href: '#',
-  },
-  {
-    label: 'Guarantees and assurances',
-    icon: `${CONFIG.assetsDir}/assets/icons/faqs/ic-assurances.svg`,
     href: '#',
   },
 ];

@@ -48,7 +48,7 @@ export function FaqsHero({ sx, ...other }: BoxProps) {
           <AnimateText
             component="h1"
             variant="h1"
-            textContent={['Where', 'can we help you?']}
+            textContent={['How', 'can we help you?']}
             variants={varFade('inRight', { distance: 24 })}
             sx={{
               color: 'common.white',
@@ -58,10 +58,10 @@ export function FaqsHero({ sx, ...other }: BoxProps) {
             }}
           />
 
-          <m.div variants={varFade('inUp', { distance: 24 })}>
+          {/* <m.div variants={varFade('inUp', { distance: 24 })}>
             <TextField
               fullWidth
-              placeholder="Search support..."
+              placeholder="Search for help..."
               slotProps={{
                 input: {
                   startAdornment: (
@@ -78,7 +78,7 @@ export function FaqsHero({ sx, ...other }: BoxProps) {
                 [`& .${outlinedInputClasses.input}`]: { typography: 'subtitle1' },
               }}
             />
-          </m.div>
+          </m.div> */}
         </Box>
       </Container>
     </Box>
