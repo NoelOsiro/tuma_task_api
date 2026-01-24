@@ -52,7 +52,7 @@ export function HomeHighlightFeatures({ sx, ...other }: BoxProps) {
 
         <Container>
           <Stack
-            ref={containerRoot.elementRef}
+            ref={containerRoot.elementRef as React.RefObject<HTMLDivElement>}
             spacing={5}
             sx={[
               () => ({

@@ -31,7 +31,7 @@ export function MapClusters({ sx, ...other }: MapProps) {
       if (feature?.geometry.type === 'Point') {
         mapRef.current?.easeTo({
           center: feature?.geometry.coordinates as LngLatLike | undefined,
-          zoom: Number.isNaN(zoom) ? 3 : zoom,
+          zoom: (zoom == null || Number.isNaN(zoom)) ? 3 : zoom,
           duration: 500,
         });
       }
