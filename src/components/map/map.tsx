@@ -37,7 +37,7 @@ export const Map = forwardRef<MapRef, MapProps>((props, ref) => {
     <MapRoot sx={sx}>
       {isClient ? (
         <Suspense fallback={renderFallback()}>
-          <LazyMap ref={ref} mapboxAccessToken={CONFIG.mapboxApiKey} {...other} />
+          {/* <LazyMap ref={ref} mapboxAccessToken={CONFIG.mapboxApiKey} {...other} /> */}
         </Suspense>
       ) : (
         renderFallback()
